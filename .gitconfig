@@ -1,0 +1,7 @@
+[user]
+	name = Jon Shea
+	email = jonshea@magnetk.com
+[color]
+	diff = auto
+	status = auto
+	branch = auto

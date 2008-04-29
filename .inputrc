@@ -1,0 +1,13 @@
+set show-all-if-ambiguous on
+set visible-stats on  # put / after directors, * after programs, etc
+
+## Make up and down search history to match beginning of line
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+"\e[C": forward-char 
+"\e[D": backward-char 
+
+$if Bash 
+   Space: magic-space 
+$endif 
+
