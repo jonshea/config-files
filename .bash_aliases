@@ -1,6 +1,8 @@
 alias ls="ls -ah -F -G"
 ## --group-directories-first --color=auto"
 
+alias py=python
+
 alias updatedb='sudo /usr/libexec/locate.updatedb'
 alias idl='/Applications/rsi/idl/bin/idl'
 alias emacs="emacs -nw -q"
