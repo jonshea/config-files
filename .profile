@@ -1,5 +1,5 @@
 export PATH=/usr/local/sbin:/usr/local/bin:~/bin:$PATH
-export GIT_EXTERNAL_DIFF=git-external-chdiff
+# export GIT_EXTERNAL_DIFF=git-external-chdiff
 
 ## MacPorts
 export PATH=$PATH:/opt/local/bin:/opt/local/sbin
@@ -33,3 +33,5 @@ test -f /opt/local/etc/bash_completion && . /opt/local/etc/bash_completion
 
 # ec2 support
 test -f .ec2/.ec2rc && . .ec2/.ec2rc
+
+export PS1='\h:\W$(__git_ps1 " ")\$ '
