@@ -1,3 +1,33 @@
+;; ;; Actual jshea customizations
+(defalias 'yes-or-no-p 'y-or-n-p)
+
+(prefer-coding-system 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+
+(setq debug-on-error t
+      ido-everywhere t
+      user-full-name    "Jon Shea"
+      frame-title-format '(buffer-file-name "%f" ("%b"))
+      change-log-default-name "ChangeLog"
+      inhibit-startup-message t
+      require-final-newline 't
+      search-highlight t
+      display-time-24hr-format t
+      tab-always-indent t
+      make-backup-files nil
+      indent-tabs-mode nil
+      query-replace-highlight t
+      tramp-default-method "scp"
+      mac-option-modifier 'meta
+;;      longlines-show-hard-newlines t
+      longlines-auto-wrap t
+      scroll-step 1)
+(setq-default indent-tabs-mode nil
+              	      save-place t)
+
+(when (boundp 'aquamacs-version)
+
 (require 'cl)
 ;;mostly just use one buffer
 (one-buffer-one-frame-mode 0)
@@ -54,33 +84,6 @@
 (setq-default uniquify-buffer-name-style 'post-forward-angle-brackets)
 (setq ispell-program-name "/opt/local/bin/ispell")
 
-;; ;; Actual jshea customizations
-(defalias 'yes-or-no-p 'y-or-n-p)
-
-(prefer-coding-system 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-
-(setq debug-on-error t
-      ido-everywhere t
-      user-full-name    "Jon Shea"
-      frame-title-format '(buffer-file-name "%f" ("%b"))
-      change-log-default-name "ChangeLog"
-      inhibit-startup-message t
-      require-final-newline 't
-      search-highlight t
-      display-time-24hr-format t
-      tab-always-indent t
-      make-backup-files nil
-      indent-tabs-mode nil
-      query-replace-highlight t
-      tramp-default-method "scp"
-      mac-option-modifier 'meta
-;;      longlines-show-hard-newlines t
-      longlines-auto-wrap t
-      scroll-step 1)
-(setq-default indent-tabs-mode nil
-              	      save-place t)
 
 (longlines-mode)
 (add-hook 'text-mode-hook 'longlines-mode)
@@ -408,3 +411,6 @@
 ;; ;; 	      (switch-to-buffer-other-frame server-buf))))
 ;; ;; (custom-set-variables '(server-kill-new-buffers t))
 ;; ;; (add-hook 'server-done-hook (lambda () (delete-frame))
+
+
+) ; end Aquamacs specific code

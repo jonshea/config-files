@@ -34,4 +34,4 @@ test -f /opt/local/etc/bash_completion && . /opt/local/etc/bash_completion
 # ec2 support
 test -f .ec2/.ec2rc && . .ec2/.ec2rc
 
-export PS1='\h:\W$(__git_ps1 " ")\$ '
+## export PS1='\h:\W$(__git_ps1 " ")\$ '
