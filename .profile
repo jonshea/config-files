@@ -25,6 +25,9 @@ PROMPT_COMMAND='history -a' # Write the history to disk whenever you display the
 
 export LC_CTYPE=en_US.UTF-8
 
+export LESSOPEN="| less_pipe.sh %s"
+export LESSCOLORIZER=pygmentize
+
 ## Aliases in seperate file
 test -f ~/.bash_aliases && . ~/.bash_aliases
 

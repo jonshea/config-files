@@ -4,6 +4,7 @@
 (prefer-coding-system 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
+(set-language-environment "UTF-8")
 
 (setq debug-on-error t
       ido-everywhere t
@@ -50,10 +51,17 @@
 (define-key osx-key-mode-map (kbd "M-{") "”")
 (define-key osx-key-mode-map (kbd "M-]") "‘")
 (define-key osx-key-mode-map (kbd "M-}") "’")
+(define-key osx-key-mode-map (kbd "M--") "–")
+(define-key osx-key-mode-map (kbd "M-_") "—")
 
 (server-start)
 ;; don't warn about killing buffers opened by emacs-client
 (remove-hook 'kill-buffer-query-functions 'server-kill-buffer-query-function)
+
+(autoload 'js2-mode "js2" nil t)
+(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+
+
 (add-to-list 'load-path "/Users/jonshea/emacs/elisp")
 (autoload 'whizzytex-mode "/Users/jonshea/emacs/whizzytex/whizzytex" 
           "WhizzyTeX, a minor-mode WYSIWYG environment for LaTeX" t) 
@@ -65,30 +73,38 @@
 ;; (require 'htmlize) ;; Makes .html files from syntax highlighted buffers
 
 ;; ;; Hooks from Clementson probably
- (add-hook 'html-mode-hook
-           (lambda ()
+(add-hook 'html-mode-hook
+          (lambda ()
  	    (nxml-mode)
  	    (rng-auto-set-schema)
  	    (rng-validate-mode)
  	    (message "My html-mode customizations loaded")))
- (add-hook 'nxml-mode-hook
+(add-hook 'nxml-mode-hook
  	  (lambda ()
-	    (longlines-mode)
+            ;; (longlines-mode)
  	    (define-key nxml-mode-map "\r" 'newline-and-indent)
  	    (setq indent-tabs-mode nil)
-;; 	    (setq local-abbrev-table nxml-mode-abbrev-table)
+            ;; (setq local-abbrev-table nxml-mode-abbrev-table)
  	    (message "My nxml-mode customizations loaded")))
+
+(setq-default nxml-sexp-element-flag t) ;Treat elements like S-expressions!
+
+(setq-default nxml-slash-auto-complete-flag t) ; type </ it will fill out the rest.
+;; I'm going nuts here trying to make Aquamacs forget about html-mode, and only us nxml mode.
+(rassq-delete-all 'html-helper-mode magic-mode-alist)
+(rassq-delete-all 'html-mode auto-mode-alist)
+(add-to-list 'auto-mode-alist '("\\.\\(rhtml\\|xhtml\\|html\\)$" . nxml-mode))
+(add-to-list 'magic-mode-alist '("\\.\\(rhtml\\|xhtml\\|html\\)$" . nxml-mode))
+
+(put 'nxml-mode 'flyspell-mode-predicate 'sgml-mode-flyspell-verify) 
 
 ;; ;; ;; duplicate buffers easier to spot
 (require 'uniquify)
 (setq-default uniquify-buffer-name-style 'post-forward-angle-brackets)
 (setq ispell-program-name "/opt/local/bin/ispell")
 
-
 (longlines-mode)
 (add-hook 'text-mode-hook 'longlines-mode)
-
-;; (setq hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-all-buffers try-expand-dabbrev-from-kill try-complete-file-name-partially try-complete-file-name try-expand-all-abbrevs try-expand-list try-expand-line try-complete-lisp-symbol-partially try-complete-lisp-symbol))
 
 (line-number-mode 1)
 (display-time)
@@ -109,12 +125,10 @@
 (global-set-key (kbd "C-l") 'goto-line)
 (global-set-key (kbd "C-;") 'comment-region)
 (global-set-key (kbd "C-:") 'uncomment-region)
-(global-set-key (kbd "A-w") 'nil)
-(global-set-key (kbd "C-<tab>") 'dabbrev-expand)
+;;(global-set-key (kbd "A-w") 'nil)
+;;(global-set-key (kbd "C-<tab>") 'dabbrev-expand)
 (define-key minibuffer-local-map (kbd "C-<tab>") 'dabbrev-expand)
 
-(add-to-list 'auto-mode-alist '("\\.rhtml$" . nxml-mode))
-;;(add-to-list 'flyspell-prog-text-faces 'nxml-text-face)
 
 (add-to-list 'load-path
 	     "~/emacs/yasnippet")
@@ -123,33 +137,7 @@
 (yas/load-directory "~/emacs/yasnippet/snippets/")
 
 
-
-
-
-
-
-
-
-;; ;;(define-key osx-key-mode-map (kbd "A-q") 'fill-paragraph)
-
-;; (load-library "paren")
-
-;; (add-to-list 'auto-mode-alist
-;;              (cons (concat "\\." (regexp-opt '("xml" "xsd" "sch" "rng" "xslt" "svg" "rss") t) "\\'")
-;;                    'nxml-mode))
-;; (setq magic-mode-alist
-;;       (cons '("<\\?xml " . nxml-mode)
-;;             magic-mode-alist))
-;; (fset 'xml-mode 'nxml-mode)
-
-
-
-;; ;; abbrevs
-;; (setq default-abbrev-mode t
-;;       abbrev-file-name "~/.emacs.d/abbrev_defs")
-;; (when (file-exists-p abbrev-file-name)
-;;   (quietly-read-abbrev-file))
-;; (abbrev-mode 1)
+(load-library "paren")
 
 ;; (defadvice longlines-mode-on (around longlines-folding activate)
 ;;   "Do the right then when `folding-mode' is active."
@@ -161,17 +149,6 @@
 ;;     (when refold
 ;;       (folding-mode 1))))
 
-;; ;(add-to-list 'load-path "/Users/jonshea/emacs/versor/lisp")
-;; ;(require 'versor)
-;; ;(require 'languide)
-;; ;(versor-setup)
-
-;; ;(autoload 'ruby-mode "ruby-mode" "Load ruby-mode")
-;; (require 'ruby-mode) 
-;; (require 'ruby-electric) 
-;; (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
-;; ;(autoload 'ruby-electric "ruby-electric-mode" "Load ruby-electric-mode")
-
 
 ;; (add-hook 'LaTeX-mode-hook (lambda ()
 ;; 			     (TeX-fold-mode 1)))
@@ -182,22 +159,6 @@
 (setq TeX-newline-function 'newline-and-indent)
 (add-hook 'LaTeX-mode-hook 'TeX-PDF-mode) 
 
-;; ;;Rails
-
-;; ;; (setq hippie-expand-try-functions-list
-;; ;;       '(try-complete-abbrev
-;; ;; 	try-complete-file-name
-;; ;; 	try-expand-dabbrev))
-
-;; ;(require 'rails)
-
-;; ;(require 'snippet)
-;; ;(require 'find-recursive)
-
-;; ;(add-hook 'after-save-hook 'autocompile)
-
-;; (if (load "mwheel" t)
-;;     (mwheel-install))
 
 ;; ;(require 'paredit)
 ;; ;(require 'color-theme)
@@ -236,11 +197,6 @@
 ;; ;; ;(define-key global-map [f9] 'compile)
 
 ;; ;; (setq ispell-extra-args '("--sug-mode=ultra"))
-
-
-;; (eval-after-load "dabbrev" '(defalias 'dabbrev-expand 'hippie-expand))
-
-
 
 
 
@@ -326,40 +282,6 @@
 ;; 	    ))
 
 
-;; (defun m-shell-command ()
-;;   "Launch a shell command."
-;;   (interactive)
-;;   (let ((command (read-string "Command: ")))
-;;     (shell-command (concat command " &") (concat "*" command "*"))))
-
-;; ;; (defun autocompile nil
-;; ;;   "compile itself if ~/.emacs"
-;; ;;   (interactive)
-;; ;;   (require 'bytecomp)
-;; ;;   (if (string= (buffer-file-name) (expand-file-name (concat default-directory ".emacs")))
-;; ;;       (byte-compile-file (buffer-file-name))))
-
-
-
-;; ;; Make scripts executable automatically.
-;; (add-hook 'after-save-hook
-;;           '(lambda ()
-;;              (progn
-;;                (and (save-excursion
-;;                       (save-restriction
-;;                         (widen)
-;;                         (goto-char (point-min))
-;;                         (save-match-data
-;;                           (looking-at "^#!"))))
-;;                     (shell-command (concat "chmod u+x " buffer-file-name))
-;;                     (message (concat "Saved as script: " buffer-file-name))
-;;                     ))))
-
-;; ;; Or maybe this version
-;; ;(add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
-
-
-
 ;; (defun indent-or-expand (arg)
 ;;   "Either indent according to mode, or expand the word preceding
 ;; point."
@@ -389,19 +311,6 @@
 ;;   (interactive)
 ;;   (mark-whole-buffer)
 ;;   (shell-command-on-region (point-min) (point-max) "redcloth" t))
-
-;; ;; (defun byte-compile-init-file ()
-;; ;;   "Cribed from someone's (Bill Clementson?) .emacs"
-;; ;;   (when (equal user-init-file buffer-file-name)
-;; ;;     (when (file-exists-p (concat user-init-file ".elc"))
-;; ;;       (delete-file (concat user-init-file ".elc")))
-;; ;;     (byte-compile-file user-init-file))
-;; ;;   (message "Compiling .emacs..."))
-
-;; ;; (add-hook 'emacs-lisp-mode-hook
-;; ;; 	  (lambda ()
-;; ;; 	    (add-hook 'after-save-hook 'byte-compile-init-file t t)))
-
 
 ;; ;; ;; Stuff for emacsclient
 ;; ;; (add-hook 'server-switch-hook

@@ -1,8 +1,23 @@
-# Bash completion is the best
+## Bash completion is the best
+## This file is sourced automatically by bash-completion.
 
+### -F _filedir is better than -f because it honors spaces in file names, if passed -d it completes only directories.
+complete -F _filedir '!*.@(py|pyc|pyo)' py
 complete -f -X '!*.m' octave
 complete -f -X '!*.dvi' xdvi
 complete -f -X '!*.dvi' pdfdvim
 
-test -f ~/.git-completion && . ~/.git-completion
+_expan()
+{
+    local cur prev
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
 
+    if [[${prev} == "expan"]]; then
+        COMPREPLY=( $( compgen -W "connect disconnect" -- $cur ) )
+    fi
+    return 0
+}
+
+test -f ~/.git-completion && . ~/.git-completion
