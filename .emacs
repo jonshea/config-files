@@ -21,8 +21,8 @@
       query-replace-highlight t
       tramp-default-method "scp"
       mac-option-modifier 'meta
-;;      longlines-show-hard-newlines t
       longlines-auto-wrap t
+      flyspell-issue-message-flag nil
       scroll-step 1)
 (setq-default indent-tabs-mode nil
               	      save-place t)
@@ -32,20 +32,6 @@
 (require 'cl)
 ;;mostly just use one buffer
 (one-buffer-one-frame-mode 0)
-
-;;sometimes I want a new window
-(defun my-new-frame ()
-  (interactive)
-  (let ((one-buffer-one-frame t))
-    (new-frame)))
-(define-key osx-key-mode-map (kbd "A-n") 'my-new-frame)
-;;sometimes
-
-(defun my-close-current-window-asktosave ()
-  (interactive)
-  (let ((one-buffer-one-frame t))
-    (close-current-window-asktosave)))
-(define-key osx-key-mode-map (kbd "A-w") 'my-close-current-window-asktosave)
 
 (define-key osx-key-mode-map (kbd "M-[") "“")
 (define-key osx-key-mode-map (kbd "M-{") "”")
@@ -58,9 +44,18 @@
 ;; don't warn about killing buffers opened by emacs-client
 (remove-hook 'kill-buffer-query-functions 'server-kill-buffer-query-function)
 
+;; (add-hook 'server-switch-hook 
+;;           (lambda ()
+;;             (use-local-map (copy-keymap (current-local-map)))
+;;             (local-set-key (kbd "C-x k") 'server-edit)))
+
+
 (autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
-
+(setq js2-highlight-level 3
+      js2-basic-offset 2
+      js2-use-font-lock-faces t
+)
 
 (add-to-list 'load-path "/Users/jonshea/emacs/elisp")
 (autoload 'whizzytex-mode "/Users/jonshea/emacs/whizzytex/whizzytex" 
@@ -70,7 +65,43 @@
 (require 'ido) ;; Improved file selection and buffer switching
 (ido-mode t)
 (require 'smooth-scrolling)
-;; (require 'htmlize) ;; Makes .html files from syntax highlighted buffers
+
+;; Stuff to, alegedly, make nxhtml-mode work with rhtml
+
+;;; nxml (HTML ERB template support)
+(load "~/emacs/nxhtml/autostart.el")
+(setq
+ nxhtml-global-minor-mode t
+ mumamo-chunk-coloring 'submode-colored
+ nxhtml-skip-welcome t
+ indent-region-mode t
+ rng-nxml-auto-validate-flag nil
+ nxml-degraded t
+ )
+(add-to-list 'auto-mode-alist '("\\.html\\.erb\\'" . eruby-nxhtml-mumamo-mode))
+
+;; Ranari
+;;(add-to-list 'load-path "~/emacs/rinari")
+;;(require 'rinari)
+
+;; Rails-reloaded
+(add-to-list 'load-path "~/emacs/emacs-rails-reloaded")
+(require 'rails-autoload)
+
+(add-hook 'ruby-mode 'flyspell-prog-mode t)
+(require 'ruby-block)
+(ruby-block-mode t)
+(setq ruby-block-highlight-toggle t)
+
+(add-to-list 'load-path "~/emacs/yaml")
+(require 'yaml-mode)
+(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+(add-hook 'yaml-mode-hook
+          '(lambda ()
+             (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
+
+;;(add-to-list 'load-path "~/emacs/ecb")
+;;(require 'ecb)
 
 ;; ;; Hooks from Clementson probably
 (add-hook 'html-mode-hook
@@ -93,8 +124,8 @@
 ;; I'm going nuts here trying to make Aquamacs forget about html-mode, and only us nxml mode.
 (rassq-delete-all 'html-helper-mode magic-mode-alist)
 (rassq-delete-all 'html-mode auto-mode-alist)
-(add-to-list 'auto-mode-alist '("\\.\\(rhtml\\|xhtml\\|html\\)$" . nxml-mode))
-(add-to-list 'magic-mode-alist '("\\.\\(rhtml\\|xhtml\\|html\\)$" . nxml-mode))
+;;(add-to-list 'auto-mode-alist '("\\.\\(rhtml\\|xhtml\\|html\\)$" . nxml-mode))
+;;(add-to-list 'magic-mode-alist '("\\.\\(rhtml\\|xhtml\\|html\\)$" . nxml-mode))
 
 (put 'nxml-mode 'flyspell-mode-predicate 'sgml-mode-flyspell-verify) 
 
@@ -123,8 +154,8 @@
 (global-set-key (kbd "C-c j") 'flyspell-check-previous-highlighted-word)
 (global-set-key '[(f8)] 'flyspell-check-previous-highlighted-word)
 (global-set-key (kbd "C-l") 'goto-line)
-(global-set-key (kbd "C-;") 'comment-region)
-(global-set-key (kbd "C-:") 'uncomment-region)
+(global-set-key (kbd "C-;") 'comment-region-or-line)
+(global-set-key (kbd "C-:") 'uncomment-region-or-line)
 ;;(global-set-key (kbd "A-w") 'nil)
 ;;(global-set-key (kbd "C-<tab>") 'dabbrev-expand)
 (define-key minibuffer-local-map (kbd "C-<tab>") 'dabbrev-expand)
@@ -159,10 +190,37 @@
 (setq TeX-newline-function 'newline-and-indent)
 (add-hook 'LaTeX-mode-hook 'TeX-PDF-mode) 
 
-
 ;; ;(require 'paredit)
-;; ;(require 'color-theme)
 
+(require 'color-theme)
+(setq color-theme-is-global t)
+
+(defun color-theme-feng-shea ()
+  "`color-theme-feng-shui', but highlight the variables for christ sake."
+  (interactive)
+  (color-theme-feng-shui)
+  (let ((color-theme-is-cumulative t))
+    (color-theme-install
+     '(color-theme-feng-shea
+       ((background-color . "gray99")
+        (background-mode . light)
+        (border-color . "black")
+        (cursor-color . "slateblue")
+        (foreground-color . "black")
+        (mouse-color . "slateblue")) ;; FRAME-PARAMETERS
+       nil ;; VARIABLE-DEFINITIONS
+;;     (flyspell-duplicate-face ((t (nil))))
+       (flyspell-incorrect-face ((t (:italic t :foreground "red" :slant italic :underline t))))
+       (font-lock-builtin-face ((t (:foreground "brown"))))
+       (font-lock-type-face ((t (:foreground "goldenrod"))))
+       (font-lock-comment-face ((t (:italic t :foreground "dark slate blue" :slant italic))))
+       (font-lock-doc-face ((t (:background "cornsilk"))))
+;;       (font-lock-doc-string-face ((t (nil))))
+       (font-lock-string-face ((t (:foreground "midnight blue" :background "alice blue"))))
+       (font-lock-variable-name-face ((t (:foreground "dark green"))))))))
+(color-theme-feng-shea)
+
+"show me a string"
 ;; (setq sbcl-path "/sw/bin/sbcl")
 
 ;; (setenv "SBCL_HOME" "/usr/local/lib/sbcl/") ; needed for SBCL
