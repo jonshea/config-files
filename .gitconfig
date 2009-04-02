@@ -1,6 +1,6 @@
 [user]
 	name = Jon Shea
-	email = jonshea@magnetk.com
+	email = jonshea@expandrive.com
 [color]
 	diff = auto
 	status = auto
@@ -16,3 +16,6 @@
       up = pull
 [branch]
 	autosetupmerge = true
+[github]
+	user = jonshea
+	token = 8670c907d33d5432de9f78254ba397bb
