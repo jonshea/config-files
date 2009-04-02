@@ -1,4 +1,4 @@
-alias ls="ls -ah -F -G"
+alias ls="ls -Ah -F -G"
 ## --group-directories-first --color=auto"
 
 alias py=python
@@ -8,6 +8,7 @@ alias updatedb='sudo /usr/libexec/locate.updatedb'
 alias idl='/Applications/rsi/idl/bin/idl'
 alias emacs="emacs -nw"
 alias hosts="sudo emacs /etc/hosts; dscacheutil -flushcache"
+alias ipaddr="ifconfig en1 | awk '$2~/[0-9]+\./{print$2}'"
 
 alias backup_research="rsync -avz /Users/jonshea/research/ jonshea.strongspace.com\:/home/jonshea/backup/research"
 

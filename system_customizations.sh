@@ -20,4 +20,4 @@ sudo gem install RedCloth termios rspec sake
 defaults write com.apple.itunes show-genre-when-browsing  -bool FALSE # disable genre panel in the iTunes browser
 defaults write com.apple.itunes show-store-arrow-links -bool FALSE # turn off iTunes Store links
 
-defaults write com.apple.Xcode PBXCustomTemplateMacroDefinitions '{ "ORGANIZATIONNAME" = "Magnetk LLC" ; }'
+defaults write com.apple.Xcode PBXCustomTemplateMacroDefinitions '{ "ORGANIZATIONNAME" = "ExpanDrive Inc" ; }'
