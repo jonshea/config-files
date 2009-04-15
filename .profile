@@ -3,6 +3,7 @@ export GIT_EXTERNAL_DIFF=git-external-chdiff
 
 ## MacPorts
 export PATH=$PATH:/opt/local/bin:/opt/local/sbin
+export MANPATH=$MANPATH:/opt/local/man
 export JAVA_HOME="/System/Library/Frameworks/JavaVM.framework/Home/"
 
 export IGNOREEOF=1  # pressing Ctrl+D once will not exit Bash
@@ -16,8 +17,6 @@ export HISTCONTROL=erasedups	# causes all previous lines matching the current li
 export PAGER=less;
 export EDITOR='/Applications/Aquamacs\ Emacs.app/Contents/MacOS/bin/emacsclient'
 export ALTERNATE_EDITOR='emacs'
-
-export IDL_PATH="<IDL_DEFAULT>:~/research:~/research/libraries:~/research/libraries/astrolib:~/research/libraries/db:~/research/libraries/plotting:~/research/libraries/textoidl:~/research/libraries/JHUAPL:~/research/libraries/cmlib:~/research/libraries/buie:~/research/libraries/coyoteprograms"
 
 shopt -s cdspell # Fix mispellings for cd command
 shopt -s histappend  # Append to, rather than overwite, to history on disk
@@ -64,8 +63,31 @@ function parse_git_branch {
   fi
 }
 
-## export PS1='\h:\W$(__git_ps1 " (%s)")$(parse_git_dirty)\$ '
+## Change directory to the root of the current git repo
+## GitRoot for short
+function gr {
+    git branch > /dev/null 2>&1 || return 1
+    
+    start_dir=$(pwd)
+    candidate_dir=$(pwd)
 
- export PS1='\h:\W$(parse_git_branch)\$ '
+    while true
+    do
+        if [ -d "./.git" ]
+        then
+            echo $(pwd)
+            return 0
+        elif [ "/" = $candidate_dir ]
+        then
+            cd $start_dir
+            return 1
+        else
+            cd ..
+            candidate_dir=$(pwd)
+        fi
+    done
+}
+
+export PS1='\h:\W$(parse_git_branch)\$ '
 
 export COMP_WORDBREAKS=${COMP_WORDBREAKS/\:/}
