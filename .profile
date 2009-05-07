@@ -1,3 +1,5 @@
+export EXPANDRIVE_PATH=/Users/jonshea/expandrive/python
+
 export PATH=/usr/local/sbin:/usr/local/bin:~/bin:$PATH
 export GIT_EXTERNAL_DIFF=git-external-chdiff
 
@@ -11,7 +13,7 @@ export IGNOREEOF=1  # pressing Ctrl+D once will not exit Bash
 ## Open X11 for graphics (must be running already)
 export DISPLAY=:0.0
 
-export HISTIGNORE="&:ls:ls *:[bf]g:exit"
+export HISTIGNORE="&:ls:[bf]g:exit"
 export HISTCONTROL=erasedups	# causes all previous lines matching the current line to be removed from the history list before that line is saved
 
 export PAGER=less;
@@ -32,6 +34,11 @@ test -f /opt/local/etc/bash_completion && . /opt/local/etc/bash_completion
 
 # ec2 support
 test -f .ec2/.ec2rc && . .ec2/.ec2rc
+
+function fname {
+    echo "$1"
+    find . -name "$1" -print
+}
 
 function parse_git_branch {
   git branch > /dev/null 2>&1 || return 1
@@ -63,29 +70,14 @@ function parse_git_branch {
   fi
 }
 
-## Change directory to the root of the current git repo
-## GitRoot for short
 function gr {
+    ## If the current working directory is inside of a git repository,
+    ## this function will change it to the git root (ie, the directory
+    ## that contains the .git/ directory), and then print the new directory.
     git branch > /dev/null 2>&1 || return 1
-    
-    start_dir=$(pwd)
-    candidate_dir=$(pwd)
 
-    while true
-    do
-        if [ -d "./.git" ]
-        then
-            echo $(pwd)
-            return 0
-        elif [ "/" = $candidate_dir ]
-        then
-            cd $start_dir
-            return 1
-        else
-            cd ..
-            candidate_dir=$(pwd)
-        fi
-    done
+    cd "$(git rev-parse --show-cdup)".
+    pwd
 }
 
 export PS1='\h:\W$(parse_git_branch)\$ '
