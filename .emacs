@@ -20,7 +20,7 @@
  mac-option-modifier 'meta
  make-backup-files nil
  query-replace-highlight t
- require-final-newline 't
+ require-final-newline t
  scroll-step 1
  search-highlight t
  tab-always-indent t
@@ -31,9 +31,6 @@
 (setq-default 
  indent-tabs-mode nil
  save-place t)
-
-(setq
- css-tab-mode 'auto)
 
 (global-font-lock-mode t)
 (setq font-lock-maximum-decoration t)
@@ -78,8 +75,8 @@ is a comment, uncomment."
 (when (boundp 'aquamacs-version)
   (define-key osx-key-mode-map (kbd "A-/") 'comment-or-uncomment-region-or-line)
 
-;;(autoload 'css2-mode "~/emacs/elisp/css2-mode" "Mode for editing CSS files" t)
-;;(add-to-list 'auto-mode-alist '("\\.css$" . css2-mode))
+  ;;(autoload 'css2-mode "~/emacs/elisp/css2-mode" "Mode for editing CSS files" t)
+  ;;(add-to-list 'auto-mode-alist '("\\.css$" . css2-mode))
   ;;mostly just use one buffer
   (one-buffer-one-frame-mode 0)
 
@@ -91,19 +88,20 @@ is a comment, uncomment."
   (define-key osx-key-mode-map (kbd "M-_") "—")
 
   (server-start)
-  ;; don't warn about killing buffers opened by emacs-client
-  (remove-hook 'kill-buffer-query-functions 'server-kill-buffer-query-function)
-
-;;   (add-hook 'server-switch-hook 
-;;             (lambda ()
-;;               (use-local-map (copy-keymap (current-local-map)))
-;;               (local-set-key (kbd "C-x k") 'server-edit)))
-
-
-  (add-to-list 'load-path "~/emacs/textmate")
-  (require 'textmate)
-  (textmate-mode)
-
+  (add-hook 'server-switch-hook
+            (lambda ()
+              ;; Always open new client sessions in a new frame
+              (let ((server-buf (current-buffer)))
+                (bury-buffer)
+                (switch-to-buffer-other-frame server-buf))
+              ;; Rebind both C-x k and C-x C-x to end the server session, rather than quit
+              (when (current-local-map)
+                (use-local-map (copy-keymap (current-local-map)))) 
+              (local-set-key (kbd "C-x k") 'server-edit)
+              (local-set-key (kbd "C-x C-c") 'server-edit)
+              ))
+  (add-hook 'server-done-hook (lambda () (delete-frame)))
+   
   (autoload 'js2-mode "js2" nil t)
   (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
   (setq js2-highlight-level 3
@@ -117,17 +115,13 @@ is a comment, uncomment."
   (setq
    ido-ignore-buffers ; ignore these guys
    '("\\` " "^\*Mess" "^\*Back" ".*Completion" "^\*Ido")
-   ido-work-directory-list '("~/" "~/Desktop" "~/Documents")
+   ido-work-directory-list '("~/" "~/Desktop")
    ido-case-fold  t ; be case-insensitive
    ido-use-filename-at-point nil ; don't use filename at point (annoying)
    ido-use-url-at-point nil ;  don't use url at point (annoying)
    ido-enable-flex-matching t ; be flexible
    ido-max-prospects 6 ; don't spam my minibuffer
    ido-confirm-unique-completion t) ; wait for RET, even with unique completion
-
-
-
-  (require 'smooth-scrolling)
 
   ;; nxml (HTML ERB template support)
   (load "~/emacs/nxhtml/autostart.el")
@@ -146,8 +140,8 @@ is a comment, uncomment."
   ;; (require 'rinari)
 
   ;; Rails-reloaded
-  (add-to-list 'load-path "~/emacs/emacs-rails-reloaded")
-  (require 'rails-autoload)
+  ;;  (add-to-list 'load-path "~/emacs/emacs-rails-reloaded")
+  ;;  (require 'rails-autoload)
 
   (add-hook 'ruby-mode 'flyspell-prog-mode t)
   (require 'ruby-block)
@@ -164,18 +158,20 @@ is a comment, uncomment."
   ;; ;; ;; duplicate buffers easier to spot
   (require 'uniquify)
   (setq-default uniquify-buffer-name-style 'post-forward-angle-brackets)
-  (setq ispell-program-name "/opt/local/bin/ispell")
-  (setq ispell-extra-args '("--sug-mode=ultra"))
+  (setq-default ispell-program-name "aspell")
+  ;; OS X adds words it learns to ~/Library/Spelling, and it looks reasonable to try to include them with --personal=<file>, but I don't feel like it right now.
+;;  (setq ispell-program-name "/opt/local/bin/ispell")
+;;  (setq ispell-extra-args '("--sug-mode=ultra"))
 
-  (longlines-mode)
-  (add-hook 'text-mode-hook 'longlines-mode)
+  ;;  (longlines-mode)
+  ;;  (add-hook 'text-mode-hook 'longlines-mode)
 
   (tool-bar-mode -1)
   (mouse-wheel-mode t)
   (auto-insert-mode t)
   ;;(autoload 'flyspell-mode "flyspell" "On-the-fly spell checker." t)
   ;;(add-hook 'text-mode-hook (lambda () (auto-fill-mode 1)))
-  (add-hook 'text-mode-hook 'flyspell-mode)
+  (add-hook 'text-mode-hook (lambda () (flyspell-mode 1)))
   (global-set-key '[(f5)] 'call-last-kbd-macro)
   (global-set-key (kbd "C-j") 'flyspell-check-previous-highlighted-word)
   (global-set-key (kbd "C-c j") 'flyspell-check-previous-highlighted-word)
@@ -192,10 +188,9 @@ is a comment, uncomment."
   (yas/load-directory "~/emacs/yasnippet/snippets/")
 
   (load-library "paren")
-
-  (autoload 'whizzytex-mode "/Users/jonshea/emacs/whizzytex/whizzytex" 
-    "WhizzyTeX, a minor-mode WYSIWYG environment for LaTeX" t) 
-  (setq-default whizzy-viewers '(("-skim" "skim")))
+  
+  ;;  (autoload 'whizzytex-mode "/Users/jonshea/emacs/whizzytex/whizzytex" "WhizzyTeX, a minor-mode WYSIWYG environment for LaTeX" t) 
+  ;;  (setq-default whizzy-viewers '(("-skim" "skim")))
   ;; (add-hook 'LaTeX-mode-hook (lambda ()
   ;; 			     (TeX-fold-mode 1)))
   ;; (autoload 'whizzytex-mode
@@ -316,8 +311,6 @@ is a comment, uncomment."
   ;; ;;                 (slime-lookup-lisp-implementation slime-lisp-implementations
   ;; ;;                                                   'sbcl))))
 
-  ;; ;; ;(define-key global-map [f9] 'compile)
-
   ;; (defun indent-or-expand (arg)
   ;;   "Either indent according to mode, or expand the word preceding
   ;; point."
@@ -331,31 +324,4 @@ is a comment, uncomment."
   ;; (defun my-tab-fix ()
   ;;   (local-set-key [tab] 'indent-or-expand))
  
-  ;; (add-hook 'c-mode-hook          'my-tab-fix)
-  ;; (add-hook 'sh-mode-hook         'my-tab-fix)
-  ;; (add-hook 'emacs-lisp-mode-hook 'my-tab-fix)
-
-  ;; (defun iwb ()
-  ;;   "indent whole buffer"
-  ;;   (interactive)
-  ;;   (delete-trailing-whitespace)
-  ;;   (indent-region (point-min) (point-max) nil)
-  ;;   (untabify (point-min) (point-max)))
-
-  ;; (defun textilize ()
-  ;;   "Convert buffer to html with textile"
-  ;;   (interactive)
-  ;;   (mark-whole-buffer)
-  ;;   (shell-command-on-region (point-min) (point-max) "redcloth" t))
-
-  ;; ;; ;; Stuff for emacsclient
-  ;; ;; (add-hook 'server-switch-hook
-  ;; ;; 	  (lambda nil
-  ;; ;; 	    (let ((server-buf (current-buffer)))
-  ;; ;; 	      (bury-buffer)
-  ;; ;; 	      (switch-to-buffer-other-frame server-buf))))
-  ;; ;; (custom-set-variables '(server-kill-new-buffers t))
-  ;; ;; (add-hook 'server-done-hook (lambda () (delete-frame))
-
-  
   ) ;; end Aquamacs specific code
