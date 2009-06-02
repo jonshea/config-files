@@ -19,3 +19,5 @@
 [github]
 	user = jonshea
 	token = 8670c907d33d5432de9f78254ba397bb
+[push]
+	default = tracking
