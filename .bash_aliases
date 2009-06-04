@@ -1,6 +1,8 @@
 alias ls="ls -Ah -F -G"
 ## --group-directories-first --color=auto"
 
+alias aquamacs="emacsclient -n"
+
 alias py=python
 
 alias less="less -R"
