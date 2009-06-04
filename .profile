@@ -80,6 +80,11 @@ function gr {
     pwd
 }
 
+function ff {
+    ## Find file
+    find . -name "${1}"
+}
+
 export PS1='\h:\W$(parse_git_branch)\$ '
 
 export COMP_WORDBREAKS=${COMP_WORDBREAKS/\:/}
