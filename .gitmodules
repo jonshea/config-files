@@ -1,3 +1,6 @@
 [submodule "bash-completion"]
 	path = bash-completion
 	url = git://git.debian.org/git/bash-completion/bash-completion.git
+[submodule "ruby-completion"]
+	path = ruby-completion
+	url = git://github.com/mernen/completion-ruby.git
