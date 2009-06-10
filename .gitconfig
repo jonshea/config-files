@@ -15,7 +15,7 @@
       sta = stash
       up = pull
 [branch]
-	autosetupmerge = true
+        autosetupmerge = true
 [github]
 	user = jonshea
 	token = 8670c907d33d5432de9f78254ba397bb
@@ -23,3 +23,7 @@
 	default = tracking
 [core]
 	excludesfile = /Users/jonshea/.gitexcludes
+[branch "master"]
+          remote = origin
+          merge = refs/heads/master
+    

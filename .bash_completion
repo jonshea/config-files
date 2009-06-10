@@ -1,7 +1,7 @@
 ## Bash completion is the best
 ## This file is sourced automatically by bash-completion.
 
-test -f configs/ruby-completion/completion-ruby-all && source configs/ruby-completion/completion-ruby-all
+test -f ~/config-files/ruby-completion/completion-ruby-all && source ~/config-files/ruby-completion/completion-ruby-all
 
 ### -F _filedir is better than -f because it honors spaces in file names, if passed -d it completes only directories.
 complete -F _filedir '!*.@(py|pyc|pyo)' py

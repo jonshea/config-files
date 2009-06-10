@@ -29,16 +29,17 @@ export LC_CTYPE=en_US.UTF-8
 ## Aliases in seperate file
 test -f ~/.bash_aliases && . ~/.bash_aliases
 
+function test_and_source {
+    test -f "${1}" && source "${1}"
+}
+
 # Bash completion is the best
-test -f /opt/local/etc/bash_completion && . /opt/local/etc/bash_completion
+export BASH_COMPLETION=~/config-files/bash-completion/bash_completion
+export BASH_COMPLETION_DIR=/opt/local/etc/bash_completion.d
+test_and_source $BASH_COMPLETION
 
 # ec2 support
 test -f .ec2/.ec2rc && . .ec2/.ec2rc
-
-function fname {
-    echo "$1"
-    find . -name "$1" -print
-}
 
 function parse_git_branch {
   git branch > /dev/null 2>&1 || return 1
@@ -87,4 +88,5 @@ function ff {
 
 export PS1='\h:\W$(parse_git_branch)\$ '
 
-export COMP_WORDBREAKS=${COMP_WORDBREAKS/\:/}
+## I do not know where this next line came from.
+##export COMP_WORDBREAKS=${COMP_WORDBREAKS/\:/}
