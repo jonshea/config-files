@@ -7,13 +7,9 @@
 	branch = auto
 	interactive = auto
 [alias]
-      st = status
-      di = diff
-      co = checkout
-      ci = commit -a
-      br = branch
-      sta = stash
-      up = pull
+      ## I often do something like 'git git status', wouldn't it be cool if
+      ## that just worked?
+      git = !git
 [branch]
         autosetupmerge = true
 [github]

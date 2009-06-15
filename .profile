@@ -17,7 +17,7 @@ export HISTIGNORE="&:ls:[bf]g:exit"
 export HISTCONTROL=erasedups	# causes all previous lines matching the current line to be removed from the history list before that line is saved
 
 export PAGER=less;
-export EDITOR='/Applications/Aquamacs\ Emacs.app/Contents/MacOS/bin/emacsclient'
+export EDITOR='/Applications/Aquamacs.app/Contents/MacOS/bin/emacsclient'
 export ALTERNATE_EDITOR='emacs'
 
 shopt -s cdspell # Fix mispellings for cd command
@@ -26,20 +26,22 @@ PROMPT_COMMAND='history -a' # Write the history to disk whenever you display the
 
 export LC_CTYPE=en_US.UTF-8
 
-## Aliases in seperate file
-test -f ~/.bash_aliases && . ~/.bash_aliases
-
 function test_and_source {
     test -f "${1}" && source "${1}"
 }
 
+export CONFIGS_DIR=~/config-files
+
+## Aliases in seperate file
+test_and_source $CONFIGS_DIR/.bash_aliases
+
 # Bash completion is the best
-export BASH_COMPLETION=~/config-files/bash-completion/bash_completion
+export BASH_COMPLETION=$CONFIGS_DIR/bash-completion/bash_completion
 export BASH_COMPLETION_DIR=/opt/local/etc/bash_completion.d
 test_and_source $BASH_COMPLETION
 
 # ec2 support
-test -f .ec2/.ec2rc && . .ec2/.ec2rc
+test_and_source .ec2/.ec2rc
 
 function parse_git_branch {
   git branch > /dev/null 2>&1 || return 1
