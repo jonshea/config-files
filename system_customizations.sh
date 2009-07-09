@@ -21,3 +21,6 @@ defaults write com.apple.itunes show-genre-when-browsing  -bool FALSE # disable 
 defaults write com.apple.itunes show-store-arrow-links -bool FALSE # turn off iTunes Store links
 
 defaults write com.apple.Xcode PBXCustomTemplateMacroDefinitions '{ "ORGANIZATIONNAME" = "ExpanDrive Inc" ; }'
+
+## Set cmd-V to "Paste and Match Style"
+defaults write .GlobalPreferences -dict-add NSUserKeyEquivalents “Paste and Match Style” -string “@v”
