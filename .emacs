@@ -72,6 +72,9 @@ is a comment, uncomment."
 (global-set-key (kbd "C-;") 'comment-or-uncomment-region-or-line)
 ;; Write a macro for require that takes a path, and a block and only runs the block if the path exists.
 
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+
 (when (boundp 'aquamacs-version)
   (define-key osx-key-mode-map (kbd "A-/") 'comment-or-uncomment-region-or-line)
 
@@ -110,8 +113,8 @@ is a comment, uncomment."
 
   (add-to-list 'load-path "/Users/jonshea/emacs/elisp")
 
-  (require 'ido) ;; Improved file selection and buffer switching
-  (ido-mode t)
+;;  (require 'ido) ;; Improved file selection and buffer switching
+;;  (ido-mode t)
   (setq
    ido-ignore-buffers ; ignore these guys
    '("\\` " "^\*Mess" "^\*Back" ".*Completion" "^\*Ido")
@@ -143,7 +146,13 @@ is a comment, uncomment."
   ;;  (add-to-list 'load-path "~/emacs/emacs-rails-reloaded")
   ;;  (require 'rails-autoload)
 
-  (add-hook 'ruby-mode 'flyspell-prog-mode t)
+
+  (add-hook 'python-mode (lambda () (flyspell-prog-mode 1)))
+  (add-hook 'css-mode (lambda () (flyspell-prog-mode 1)))
+  (add-hook 'js2-mode (lambda () (flyspell-prog-mode 1)))
+  (add-hook 'emacs-lisp-mode (lambda () (flyspell-prog-mode 1)))
+  
+  (add-hook 'ruby-mode (lambda () (flyspell-prog-mode 1)))
   (require 'ruby-block)
   (ruby-block-mode t)
   (setq ruby-block-highlight-toggle t)
@@ -169,8 +178,6 @@ is a comment, uncomment."
   (tool-bar-mode -1)
   (mouse-wheel-mode t)
   (auto-insert-mode t)
-  ;;(autoload 'flyspell-mode "flyspell" "On-the-fly spell checker." t)
-  ;;(add-hook 'text-mode-hook (lambda () (auto-fill-mode 1)))
   (add-hook 'text-mode-hook (lambda () (flyspell-mode 1)))
   (global-set-key '[(f5)] 'call-last-kbd-macro)
   (global-set-key (kbd "C-j") 'flyspell-check-previous-highlighted-word)
@@ -221,11 +228,7 @@ is a comment, uncomment."
           (foreground-color . "black")
           (mouse-color . "slateblue")) ;; FRAME-PARAMETERS
          nil                           ;; VARIABLE-DEFINITIONS
-         (default ((t (:stipple nil :background "gray99" :foreground "black"
-                       :inverse-video nil :box nil :strike-through nil :overline nil
-                       :underline nil :slant normal :weight normal :height 90 :width normal
-                       :family "outline-courier new"))))
-         ;; (flyspell-duplicate-face ((t (nil))))
+         (default ((t (nil))))
          (flyspell-incorrect-face ((t (:italic t :foreground "red" :slant italic :underline t))))
          ;; (font-lock-doc-string-face ((t (nil))))
          (font-lock-builtin-face ((t (:foreground "brown"))))
@@ -242,42 +245,36 @@ is a comment, uncomment."
          (region ((t (:background "lavender"))))
          ))))
 
- (defun color-theme-espresso ()
+  (defun color-theme-espresso ()
     "`color-theme-espresso', emulate the colors in Espresso.app."
     (interactive)
-;;    (color-theme-feng-shui)
-    (let ((color-theme-is-cumulative 0))
-      (color-theme-install
-       '(color-theme-espresso
-         ((background-color . "white")
-          (background-mode . light)
-          (border-color . "black")
-          (cursor-color . "slateblue")
-          (foreground-color . "black")
-          (mouse-color . "slateblue")) ;; FRAME-PARAMETERS
-         nil                           ;; VARIABLE-DEFINITIONS
-         (default ((t (:stipple nil :background "gray99" :foreground "black"
-                       :inverse-video nil :box nil :strike-through nil :overline nil
-                       :underline nil :slant normal :weight normal :height 90 :width normal
-                       :family "outline-courier new"))))
-         ;; (flyspell-duplicate-face ((t (nil))))
-         (flyspell-incorrect-face ((t (:italic t :foreground "red" :slant italic :underline t))))
-         (font-lock-doc-string-face ((t (:background "#faedc4"))))
-         (font-lock-builtin-face ((t (:foreground "brown"))))
-         (font-lock-comment-face ((t (:foreground "#777777"))))
-         (font-lock-constant-face ((t (:foreground "darkblue"))))
-         (font-lock-doc-face ((t (:background "cornsilk"))))
-         (font-lock-function-name-face ((t (:foreground "#2F6F9F" :background "#f4faff"))))
-         (font-lock-keyword-face ((t (:foreground "#DF9F4F"))))
-         (font-lock-string-face ((t (:foreground "#d44950"))))
-         (font-lock-type-face ((t (:foreground "sienna"))))
-         (font-lock-variable-name-face ((t (:foreground "#7b8c4d"))))
-         (font-lock-warning-face ((t (:foreground "#f9f2ce" :background "#f93232"))))
-         (highlight ((t (:background "mistyRose"))))
-         (region ((t (:background "#b5d5ff"))))
-         ))))
-
-(color-theme-espresso)
+    (color-theme-install
+     '(color-theme-espresso
+       ((background-color . "gray99")
+        (background-mode . light)
+        (border-color . "black")
+        (cursor-color . "slateblue")
+        (foreground-color . "black")
+        (mouse-color . "slateblue"))   ;; FRAME-PARAMETERS
+       nil                             ;; VARIABLE-DEFINITIONS
+       (default ((t (nil))))
+       (flyspell-incorrect-face ((t (:italic t :foreground "red" :slant italic :underline t))))
+       (font-lock-doc-string-face ((t (:background "#faedc4"))))
+       (font-lock-builtin-face ((t (:foreground "brown"))))
+       (font-lock-comment-face ((t (:foreground "#777777"))))
+       (font-lock-constant-face ((t (:foreground "darkblue"))))
+       (font-lock-doc-face ((t (:background "cornsilk"))))
+       (font-lock-function-name-face ((t (:foreground "#2F6F9F" :background "#f4faff"))))
+       (font-lock-keyword-face ((t (:foreground "#DF9F4F"))))
+       (font-lock-string-face ((t (:foreground "#d44950"))))
+       (font-lock-type-face ((t (:foreground "sienna"))))
+       (font-lock-variable-name-face ((t (:foreground "#7b8c4d"))))
+       (font-lock-warning-face ((t (:foreground "#f9f2ce" :background "#f93232"))))
+       (highlight ((t (:background "mistyRose"))))
+       (region ((t (:background "#b5d5ff"))))
+       )))
+ 
+  (color-theme-espresso)
 ;;  (color-theme-feng-shea)
 
   ;; (setq sbcl-path "/sw/bin/sbcl")
