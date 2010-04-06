@@ -24,3 +24,18 @@ defaults write com.apple.Xcode PBXCustomTemplateMacroDefinitions '{ "ORGANIZATIO
 
 ## Set cmd-V to "Paste and Match Style"
 defaults write .GlobalPreferences -dict-add NSUserKeyEquivalents “Paste and Match Style” -string “@v”
+
+## Disable "wake on lid open"
+# sudo pmset -a lidwake 0
+
+## Make it so that when you copy an address out of Mail.app it doesn't copy the name
+defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool NO
+## Enable Mail.app plugins
+defaults write com.apple.mail EnableBundles -bool true
+defaults write com.apple.mail BundleCompatibilityVersion 3
+
+## Add github to gem-source
+gem sources -a http://gems.github.com
+
+## Disable download quarantine
+defaults write com.apple.LaunchServices LSQuarantine -bool NO
