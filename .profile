@@ -3,6 +3,10 @@ export EXPANDRIVE_PATH=/Users/jonshea/expandrive/python
 export PATH=/usr/local/sbin:/usr/local/bin:~/bin:$PATH
 export GIT_EXTERNAL_DIFF=git-external-chdiff
 
+export GOROOT=~/projects/go-lang/
+export GOOS=darwin
+export GOARCH=amd64
+
 ## MacPorts
 export PATH=$PATH:/opt/local/bin:/opt/local/sbin
 export MANPATH=$MANPATH:/opt/local/man
@@ -39,6 +43,7 @@ test_and_source $CONFIGS_DIR/.bash_aliases
 export BASH_COMPLETION=$CONFIGS_DIR/bash-completion/bash_completion
 export BASH_COMPLETION_DIR=/opt/local/etc/bash_completion.d
 test_and_source $BASH_COMPLETION
+test_and_source $CONFIGS_DIR/ruby-completion/completion-ruby-all
 
 # ec2 support
 test_and_source .ec2/.ec2rc

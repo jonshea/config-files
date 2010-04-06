@@ -1,8 +1,7 @@
 alias ls="ls -Ah -F -G"
 ## --group-directories-first --color=auto"
 
-alias aquamacs="emacsclient -n"
-alias aquamacs_raw="/Applications/Aquamacs.app/Contents/MacOS/Aquamacs -Q"
+alias ec="emacsclient -n"
 alias py=python
 
 alias less="less -R"

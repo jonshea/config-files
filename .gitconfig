@@ -1,11 +1,13 @@
 [user]
 	name = Jon Shea
 	email = jonshea@expandrive.com
+#	signingkey = gpg-key-id
 [color]
-	diff = auto
-	status = auto
-	branch = auto
-	interactive = auto
+	ui = true
+#	diff = auto
+#	status = auto
+#	branch = auto
+#	interactive = auto
 [alias]
       ## I often do something like 'git git status', wouldn't it be cool if
       ## that just worked?
@@ -16,10 +18,12 @@
 	user = jonshea
 	token = 8670c907d33d5432de9f78254ba397bb
 [push]
-	default = tracking
+	default = matching
 [core]
 	excludesfile = /Users/jonshea/.gitexcludes
 [branch "master"]
           remote = origin
           merge = refs/heads/master
     
+[diff "ruby"]
+	funcname = ^ *\\(\\(class\\|module\\|def\\) .*\\)
