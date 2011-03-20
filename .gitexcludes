@@ -1,6 +1,13 @@
 .DS_Store
+
+## Xcode files
 *.pbxuser
 *.perspective
 *.perspectivev3
 *.mode1v3
 *.mode2v3
+
+## Emacs files
+.#*
+*#
+

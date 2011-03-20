@@ -1,13 +1,35 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-(load "~/functions.el")
+(defvar home-dir ""
+  "")
+(defvar config-files ""
+  "")
 
-;;  Write something to make shift-space insert a NBSP
+(defvar elisp-dir "~/emacs/"
+  "Directory of elisp files and packages.")
+
+(load "~/functions.el")
+(add-to-list 'load-path (concat elisp-dir "elisp"))
 
 (prefer-coding-system 'utf-8-mac)
 (set-terminal-coding-system 'utf-8-mac)
 (set-keyboard-coding-system 'utf-8-mac)
 (set-language-environment "UTF-8")
+
+
+(add-to-list 'exec-path "/usr/local/bin")
+(add-to-list 'exec-path "/Users/jonshea/foursquare.web")
+(add-to-list 'exec-path ".")
+(add-to-list 'load-path (concat elisp-dir "scala"))
+(require 'scala-mode-auto)
+(add-to-list 'load-path (concat elisp-dir "ensime/elisp"))
+(require 'ensime)
+(setq ensime-sbt-program-name "./sbt.py") ;; figure out a better way to do this
+(add-hook 'scala-mode-hook
+	  (lambda ()
+	    (ensime-scala-mode-hook)
+	    (flyspell-prog-mode)
+	  ))
 
 (setq
  change-log-default-name "ChangeLog"
@@ -30,9 +52,11 @@
  transient-mark-mode t
  user-full-name "Jon Shea"
  vc-follow-symlinks t
+ default-truncate-lines t
  )
 (setq-default 
  indent-tabs-mode nil
+ tab-width 4
  save-place t)
 
 (global-font-lock-mode t)
@@ -42,16 +66,11 @@
 (show-paren-mode 1)
 (column-number-mode 1)
 (global-auto-revert-mode 1)
-
-(if (fboundp 'global-visual-line-mode) (global-visual-line-mode 1))
+;;(global-visual-line-mode 0)
+(if (fboundp 'global-visual-line-mode) (global-visual-line-mode 0))
 
 (require 'cl)
 
-;;; This was installed by package-install.el.
-(when (load
-       (expand-file-name "~/.emacs.d/elpa/package.el"))
-  (package-initialize))
-  
 (set-face-attribute 'default nil :height 110 :family "menlo")
 
 ;; I'm hardcore. I search with regexp
@@ -67,19 +86,57 @@
 (add-to-list 'load-path "~/projects/go-lang/misc/emacs" t)
 (with-library 'go-mode-load)
 
-(global-set-key (kbd "M-[") "“")
-(global-set-key (kbd "M-{") "”")
-(global-set-key (kbd "M-]") "‘")
-(global-set-key (kbd "M-}") "’")
-(global-set-key (kbd "M--") "–")
-(global-set-key (kbd "M-_") "—")
-(global-set-key (kbd "S-<SPC>") #x00A0) ;; I don't think emacs can recognise shift-space. describe-key just says 'SPC'
+(add-to-list 'load-path (concat elisp-dir "textmate"))
+(with-library 'textmate
+  (textmate-mode)
+  (setq *textmate-gf-exclude* "/\\/\\.|(\\/|^)(\\.|vendor|fixtures|tmp|log|build)($|\\/)|(\\.xcodeproj|\\.nib|\\.framework|\\.app|\\.pbproj|\\.pbxproj|\\.xcode|\\.xcodeproj|\\.bundle|\\.pyc|\\.class|\\.jar)$"))
+  
+(defvar jcs-keys-mode-map nil "Keymap for jcs-keys mode.")
+(setq jcs-keys-mode-map (make-sparse-keymap))
+(define-minor-mode jcs-keys-mode
+  "Minor mode that defines all of my favorite key bindings."
+;;  :lighter "jk"
+  :global t
+  (define-key jcs-keys-mode-map (kbd "M-[") "“")
+  (define-key jcs-keys-mode-map (kbd "M-{") "”")
+  (define-key jcs-keys-mode-map (kbd "M-]") "‘")
+  (define-key jcs-keys-mode-map (kbd "M-}") "’")
+  (define-key jcs-keys-mode-map (kbd "M--") "–")
+  (define-key jcs-keys-mode-map (kbd "M-_") "—")
+  (define-key global-map (kbd "RET") 'newline-and-indent)
+  ;; Shift space should insert a non-breaking space.
+  (define-key jcs-keys-mode-map (kbd "S-<SPC>") #x00A0) ;; I don't think emacs can recognise shift-space. describe-key just says 'SPC'
 
-(global-set-key (kbd "C-l") 'goto-line)
-(global-set-key "\C-m" 'newline-and-indent)
+  (define-key jcs-keys-mode-map (kbd "C-l") 'goto-line)
+;;  (define-key jcs-keys-mode-map "\C-m" 'newline-and-indent)
+  (define-key jcs-keys-mode-map (kbd "C-;") 'comment-or-uncomment-region-or-line)
+  (define-key jcs-keys-mode-map (kbd "s-/") 'comment-or-uncomment-region-or-line)
+  )
+(jcs-keys-mode)
+
+
 (define-key minibuffer-local-map (kbd "ESC") 'keyboard-quit) ;; Doesn't quite work yet...
 
 (global-set-key (kbd "C-;") 'comment-or-uncomment-region-or-line)
+
+(add-to-list 'load-path (concat elisp-dir "ocaml"))
+(setq auto-mode-alist
+          (cons '("\\.ml[iyl]?$" .  caml-mode) auto-mode-alist))
+
+(autoload 'caml-mode "ocaml" (interactive)
+  "Major mode for editing Caml code." t)
+(autoload 'camldebug "camldebug" (interactive) "Debug caml mode")
+
+
+(add-to-list 'load-path (concat elisp-dir "slime"))
+(require 'slime)
+
+(add-to-list 'load-path (concat elisp-dir "clojure-mode"))
+(require 'clojure-mode)
+
+(add-to-list 'auto-mode-alist '("\\.S\\'" . gas-mode))
+(require 'gas-mode)
+
 
 (add-hook 'emacs-lisp-mode-hook
           (lambda () 
@@ -91,28 +148,37 @@
 (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
 
 (add-to-list 'load-path "~/emacs/color-theme/")
-(if-emacs-app ;;I’m not sure why my color theme breaks in Terminal.app, but I don't feel like working on it now
-(with-library 'color-theme
-  (color-theme-initialize)
-  (setq color-theme-is-global t)
-  (color-theme-espresso)
-  )
-)
+;;(if-emacs-app ;;I’m not sure why my color theme breaks in Terminal.app, but I don't feel like working on it now
+;; (with-library 'color-theme
+;;   (color-theme-initialize)
+;;   (setq color-theme-is-global t)
+;;   (color-theme-espresso)
+;;   )
+
  
 (server-start)
 (add-hook 'server-switch-hook
           (lambda ()
+
             ;; Always open new client sessions in a new frame
             (let ((server-buf (current-buffer)))
               (bury-buffer)
               (switch-to-buffer-other-frame server-buf))
             ;; Rebind both C-x k and C-x C-x to end the server session, rather than quit
+            ;; FIXME: This doesn’t like it when the client is terminated before the buffer is closed
             (when (current-local-map)
               (use-local-map (copy-keymap (current-local-map)))) 
             (local-set-key (kbd "C-x k") 'server-edit)
             (local-set-key (kbd "C-x C-c") 'server-edit)
+
+            ;; Turn on flyspell-mode for git commit messages
+            (when (string-match-p ".git/COMMIT_EDITMSG$" (buffer-file-name))
+              (flyspell-mode)
+              (turn-on-auto-fill))
             ))
-(add-hook 'server-done-hook (lambda () (delete-frame)))
+(add-hook 'server-done-hook (lambda ()
+                              (kill-buffer nil)
+                              (delete-frame)))
 
 ;; (define-key osx-key-mode-map (kbd "A-/") 'comment-or-uncomment-region-or-line)
 
@@ -124,20 +190,34 @@
 (global-set-key (kbd "C-c j") 'flyspell-check-previous-highlighted-word)
 (global-set-key '[(f8)] 'flyspell-check-previous-highlighted-word)
 
-(add-to-list 'load-path "~/emacs/company")
-(autoload 'company-mode "company" nil t)
+(add-to-list 'load-path (concat elisp-dir "ess/lisp"))
+(with-library 'ess-site)
 
-(add-to-list 'load-path "/Users/jonshea/emacs/elisp")
+;; (add-to-list 'load-path "~/emacs/company")
+;; (autoload 'company-mode "company" nil t)
+
+(autoload 'whitespace-mode "whitespace" "Toggle whitespace visualization." t)
+
+(define-key comint-mode-map [up] 'comint-previous-matching-input-from-input)
+(define-key comint-mode-map [down] 'comint-next-matching-input-from-input)
+
+(add-to-list 'load-path elisp-dir)
   
 (autoload 'js2-mode "js2" nil t)
-(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (setq js2-highlight-level 3
-      js2-basic-offset 2
+      js2-basic-offset 4
       js2-use-font-lock-faces t
+      js2-bounce-indent-p t
       js2-enter-indents-newline t)
 
-;;  (require 'ido) ;; Improved file selection and buffer switching
-;;  (ido-mode t)
+;; (add-to-list 'load-path (concat elisp-dir "auto-complete"))
+;; (require 'auto-complete-config)
+;; (add-to-list 'ac-dictionary-directories (concat elisp-dir "auto-complete/ac-dict"))
+;; (ac-config-default)
+
+(require 'ido) ;; Improved file selection and buffer switching
+(ido-mode t)
 (setq
  ido-ignore-buffers                     ; ignore these guys
  '("\\` " "^\*Mess" "^\*Back" ".*Completion" "^\*Ido")
@@ -151,15 +231,15 @@
 
 ;; Support for html5 in nxml mode.
 ;; See http://github.com/hober/html5-el/tree/master
-(add-to-list 'load-path "~/emacs/html5-el/")
+(add-to-list 'load-path (concat elisp-dir "html5-el/"))
 (eval-after-load "rng-loc"
-  '(add-to-list 'rng-schema-locating-files "~/emacs/html5-el/schemas.xml"))
+  '(add-to-list 'rng-schema-locating-files (concat elisp-dir "html5-el/schemas.xml")))
 (with-library 'whattf-dt)
 
 
 ;; nxhml (HTML ERB template support)
 (if-emacs-app
-(with-loaded-file "~/emacs/nxhtml/autostart.el"
+(with-loaded-file (concat elisp-dir "nxhtml/autostart.el")
   (setq
    nxhtml-global-minor-mode t
    mumamo-chunk-coloring 'submode-colored
@@ -168,25 +248,28 @@
    rng-nxml-auto-validate-flag nil
    nxml-degraded t)
   (add-to-list 'auto-mode-alist '("\\.rhtml\\'" . eruby-html-mumamo))
-  (add-to-list 'auto-mode-alist '("\\.html\\.erb\\'" . eruby-nxhtml-mumamo-mode)))
+  (add-to-list 'auto-mode-alist '("\\.html\\.erb\\'" . eruby-nxhtml-mumamo-mode))
+  (add-to-list 'auto-mode-alist '("\\.html\\.mako\\'" .  mako-html-mumamo-mode)))
 )
 
-(add-to-list 'load-path "~/emacs/zencoding/")
-(with-library 'zencoding-mode
-  (add-hook 'sgml-mode-hook 'zencoding-mode) ;; Auto-start on any markup modes
+(add-hook 'nXhtml-mode-hook
+          (lambda ()
+            (turn-on-visual-line-mode)
+            ))
+
+(add-hook 'eruby-nxhtml-mumamo-mode-hook (lambda ()
+    (flyspell-prog-mode)
+    (visual-line-mode t) ;;eruby-html-mumamo-mode-map 
+    (define-key nxhtml-tag-map (kbd "M-{") "”"))
+;;    (define-key nxhtml-tag-map (kbd "M-}") "’")
+    )
+;; (add-to-list 'load-path (concat elisp-dir "zencoding/"))
+;; (with-library 'zencoding-mode
+;;  (add-hook 'sgml-mode-hook 'zencoding-mode) ;; Auto-start on any markup modes
 ;;  (add-hook 'eruby-nxhtml-mumamo-mode 'zencoding-mode)
-  )
-  
-;; Ranari
-;; (add-to-list 'load-path "~/emacs/rinari")
-;; (require 'rinari)
-
-;; Rails-reloaded
-;;  (add-to-list 'load-path "~/emacs/emacs-rails-reloaded")
-;;  (require 'rails-autoload)
+;;)
 
 
-(define-key global-map (kbd "RET") 'newline-and-indent)
 
 ;; Auto-indent pasted code. Figure out how to make this work with cmnd-v also
 ;;   (dolist (command '(yank yank-pop))
@@ -220,26 +303,27 @@
 
 (setq ruby-mode-hook nil)
 
-(with-library 'ruby-block
-  (ruby-block-mode t)
-  (setq ruby-block-highlight-toggle t))
+;; (with-library 'ruby-block
+;;   (ruby-block-mode t)
+;;   (setq ruby-block-highlight-toggle t))
 
-(add-to-list 'load-path "~/emacs/yaml")
+(add-to-list 'load-path (concat elisp-dir "yaml"))
 (with-library 'yaml-mode
   (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
   (add-hook 'yaml-mode-hook
-            '(lambda ()
+            (lambda ()
                (define-key yaml-mode-map "\C-m" 'newline-and-indent))))
 
 (setq-default ispell-program-name "aspell")
+(setq-default ispell-program-name "/usr/local/bin/aspell")
 
-(add-to-list 'load-path "~/emacs/yasnippet")
-;;  (require 'yasnippet)
+(add-to-list 'load-path (concat elisp-dir "yasnippet"))
+(require 'yasnippet)
 ;;  (setq yas/root-directory "~/emacs/yasnippet/snippets/")
 ;;  (add-to-list 'yas/extra-mode-hooks 'ruby-mode-hook)
 ;;  (yas/load-directory yas/root-directory)
-;;  (yas/initialize)
-;;  (yas/load-directory  "~/emacs/yasnippet/snippets")
+(yas/initialize)
+(yas/load-directory  "~/emacs/yasnippet/snippets")
   
 (load-library "paren")
   
@@ -251,9 +335,32 @@
 ;;   "whizzytex"
 ;;   "WhizzyTeX, a minor-mode WYSIWIG environment for LaTeX" t)
 
+(add-to-list 'load-path "/opt/local/share/emacs/site-lisp/auctex" t)
+(with-library 'tex-site)
+;;(load "/opt/local/share/emacs/site-lisp/auctex.el" nil t t)
+;;(add-to-list 'TeX-command-list '("pdflatex" "/opt/local/bin/pdflatex %s" PDFLaTeX t t :help "Run pdflatex") t)
+;;(add-hook 'LaTeX-mode-hook 'visual-line-mode)
+;;(setq TeX-engine "")
 (setq TeX-newline-function 'newline-and-indent)
-(add-hook 'LaTeX-mode-hook 'TeX-PDF-mode) 
-
-;; ;(require 'paredit)
-
-(setq-default ispell-program-name "/opt/local/bin/aspell")
+(add-hook 'LaTeX-mode-hook (lambda() (
+          TeX-PDF-mode
+          visual-line-mode
+          LaTeX-math-mode
+          )))
+          
+(setq interprogram-cut-function nil)
+(setq interprogram-paste-function nil)
+(defun paste-from-pasteboard ()
+  (interactive)
+  (and mark-active (filter-buffer-substring (region-beginning) (region-end) t))
+  (insert (ns-get-pasteboard))
+  )
+(defun copy-to-pasteboard (p1 p2)
+  (interactive "r*")
+  (ns-set-pasteboard (buffer-substring p1 p2))
+  (message "Copied selection to pasteboard")
+  )
+(defun cut-to-pasteboard (p1 p2) (interactive "r*") (ns-set-pasteboard (filter-buffer-substring p1 p2 t)) )
+(global-set-key (kbd "s-v") 'paste-from-pasteboard)
+(global-set-key (kbd "s-c") 'copy-to-pasteboard)
+(global-set-key (kbd "s-x") 'cut-to-pasteboard)

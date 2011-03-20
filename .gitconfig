@@ -1,6 +1,6 @@
 [user]
 	name = Jon Shea
-	email = jonshea@expandrive.com
+	email = jonshea@foursquare.com
 #	signingkey = gpg-key-id
 [color]
 	ui = true
@@ -12,8 +12,7 @@
       ## I often do something like 'git git status', wouldn't it be cool if
       ## that just worked?
       git = !git
-[branch]
-        autosetupmerge = true
+      patch = !(git diff HEAD~ HEAD --no-ext-diff) > ~/Desktop/$(git rev-parse --short HEAD).patch
 [github]
 	user = jonshea
 	token = 8670c907d33d5432de9f78254ba397bb
@@ -22,8 +21,8 @@
 [core]
 	excludesfile = /Users/jonshea/.gitexcludes
 [branch "master"]
-          remote = origin
-          merge = refs/heads/master
+    remote = origin
+    merge = refs/heads/master
     
 [diff "ruby"]
 	funcname = ^ *\\(\\(class\\|module\\|def\\) .*\\)

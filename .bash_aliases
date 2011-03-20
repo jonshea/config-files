@@ -1,6 +1,7 @@
 alias ls="ls -Ah -F -G"
 ## --group-directories-first --color=auto"
 
+alias solr="java -Dsolr.solr.home=solr -jar start.jar"
 alias ec="emacsclient -n"
 alias py=python
 
@@ -12,6 +13,7 @@ alias hosts="sudo emacs /etc/hosts; dscacheutil -flushcache"
 alias ipaddr="ifconfig en1 | awk '$2~/[0-9]+\./{print$2}'"
 alias grep="grep -E --color=auto"
 
+(which rlwrap > /dev/null) && alias ocaml="rlwrap ocaml"
 
 alias new_password="apg -t -a 0 -M sNcl -n 6 -x 10 -m 8 -s"
 

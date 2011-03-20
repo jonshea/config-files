@@ -7,17 +7,5 @@ complete -f -X '!*.m' octave
 complete -f -X '!*.dvi' xdvi
 complete -f -X '!*.dvi' pdfdvim
 
-_expan()
-{
-    local cur prev
-    COMPREPLY=()
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    prev="${COMP_WORDS[COMP_CWORD-1]}"
-
-    if [[${prev} == "expan"]]; then
-        COMPREPLY=( $( compgen -W "connect disconnect" -- $cur ) )
-    fi
-    return 0
-}
-
 test -f ~/.git-completion && . ~/.git-completion
+test -f /usr/local/Library/Contributions/brew_bash_completion.sh && . /usr/local/Library/Contributions/brew_bash_completion.sh

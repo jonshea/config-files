@@ -2,7 +2,7 @@
 
 CONFIGS_DIR="$(pwd)"
 
-CONFIG_FILES=( .profile .inputrc .emacs .irbrc .gitconfig functions.el)
+CONFIG_FILES=( .profile .inputrc .emacs .irbrc .gitconfig functions.el .bash_completion)
 
 for file in ${CONFIG_FILES[@]}
 do
