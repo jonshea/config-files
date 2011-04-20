@@ -1,28 +1,25 @@
 [user]
-	name = Jon Shea
-	email = jonshea@foursquare.com
-#	signingkey = gpg-key-id
-[color]
-	ui = true
-#	diff = auto
-#	status = auto
-#	branch = auto
-#	interactive = auto
+  name = Jon Shea
+  email = jonshea@foursquare.com
 [alias]
-      ## I often do something like 'git git status', wouldn't it be cool if
-      ## that just worked?
-      git = !git
-      patch = !(git diff HEAD~ HEAD --no-ext-diff) > ~/Desktop/$(git rev-parse --short HEAD).patch
-[github]
-	user = jonshea
-	token = 8670c907d33d5432de9f78254ba397bb
-[push]
-	default = matching
-[core]
-	excludesfile = /Users/jonshea/.gitexcludes
+  ## I often do something like 'git git status', wouldn't it be cool if
+  ## that just worked?
+  git = !git
+  patch = !(git diff HEAD~ HEAD --no-ext-diff) > ~/Desktop/$(git rev-parse --short HEAD).patch
+[branch]
+  autosetuprebase = always
 [branch "master"]
-    remote = origin
-    merge = refs/heads/master
-    
-[diff "ruby"]
-	funcname = ^ *\\(\\(class\\|module\\|def\\) .*\\)
+  remote = origin
+  merge = refs/heads/master
+[core]
+  excludesfile = /Users/jonshea/.gitexcludes
+[color]
+  ui = true
+[difftool "Kaleidoscope"]
+  cmd = ksdiff-wrapper git \"$LOCAL\" \"$REMOTE\"
+[difftool]
+  prompt = false
+[diff]
+  tool = Kaleidoscope
+[push]
+  default = matching
