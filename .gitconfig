@@ -6,6 +6,7 @@
   ## that just worked?
   git = !git
   patch = !(git diff HEAD~ HEAD --no-ext-diff) > ~/Desktop/$(git rev-parse --short HEAD).patch
+  lastweek = !git log --committer=jonshea --no-prefix --simplify-merges --reverse --since='1 week ago'
 [branch]
   autosetuprebase = always
 [branch "master"]

@@ -16,7 +16,6 @@
 (set-keyboard-coding-system 'utf-8-mac)
 (set-language-environment "UTF-8")
 
-
 (add-to-list 'exec-path "/usr/local/bin")
 (add-to-list 'exec-path "/Users/jonshea/foursquare.web")
 (add-to-list 'exec-path ".")
@@ -28,6 +27,10 @@
 (add-hook 'scala-mode-hook
 	  (lambda ()
 	    (ensime-scala-mode-hook)
+        (local-set-key [return]
+                       '(lambda () (interactive)
+                          (setq last-command nil)
+                          (newline-and-indent)))
 	    (flyspell-prog-mode)
 	  ))
 
@@ -71,20 +74,34 @@
 
 (require 'cl)
 
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+
+;; (unless (require 'el-get nil t)
+;;   (url-retrieve
+;;    "https://github.com/dimitri/el-get/raw/master/el-get-install.el"
+;;    (lambda (s)
+;;      (end-of-buffer)
+;;      (eval-print-last-sexp))))
+
+;; ;; (setq el-get-sources
+;; ;;       '((:name color-theme-solarized)
+;; ;;         (:name
+         
+
+;; ;; (el-get 'sync '(color-theme-solarized js2-mode yaml-mode color-theme emacs-textmate scala-mode))
+;; ;; (el-get 'wait)
+
 (set-face-attribute 'default nil :height 110 :family "menlo")
 
-;; I'm hardcore. I search with regexp
-(global-set-key (kbd "C-s") 'isearch-forward-regexp)
-(global-set-key (kbd "C-r") 'isearch-backward-regexp)
-(global-set-key [f1] 'tall-window)
-;;(define-key isearch-mode-map (kbd "C-r") 'isearch-repeat-backward)
-;; Write an isearch-mode-map binding for the arrow keys
+;; ;; I'm hardcore. I search with regexp
+;; (global-set-key (kbd "C-s") 'isearch-forward-regexp)
+;; (global-set-key (kbd "C-r") 'isearch-backward-regexp)
+;; (global-set-key [f1] 'tall-window)
+;; ;;(define-key isearch-mode-map (kbd "C-r") 'isearch-repeat-backward)
+;; ;; Write an isearch-mode-map binding for the arrow keys
 
-(require 'uniquify)
-(setq-default uniquify-buffer-name-style 'post-forward-angle-brackets)
-
-(add-to-list 'load-path "~/projects/go-lang/misc/emacs" t)
-(with-library 'go-mode-load)
+;; (require 'uniquify)
+;; (setq-default uniquify-buffer-name-style 'post-forward-angle-brackets)
 
 (add-to-list 'load-path (concat elisp-dir "textmate"))
 (with-library 'textmate
@@ -115,27 +132,27 @@
 (jcs-keys-mode)
 
 
-(define-key minibuffer-local-map (kbd "ESC") 'keyboard-quit) ;; Doesn't quite work yet...
+;; (define-key minibuffer-local-map (kbd "ESC") 'keyboard-quit) ;; Doesn't quite work yet...
 
-(global-set-key (kbd "C-;") 'comment-or-uncomment-region-or-line)
+;; (global-set-key (kbd "C-;") 'comment-or-uncomment-region-or-line)
 
-(add-to-list 'load-path (concat elisp-dir "ocaml"))
-(setq auto-mode-alist
-          (cons '("\\.ml[iyl]?$" .  caml-mode) auto-mode-alist))
+;; (add-to-list 'load-path (concat elisp-dir "ocaml"))
+;; (setq auto-mode-alist
+;;           (cons '("\\.ml[iyl]?$" .  caml-mode) auto-mode-alist))
 
-(autoload 'caml-mode "ocaml" (interactive)
-  "Major mode for editing Caml code." t)
-(autoload 'camldebug "camldebug" (interactive) "Debug caml mode")
+;; (autoload 'caml-mode "ocaml" (interactive)
+;;   "Major mode for editing Caml code." t)
+;; (autoload 'camldebug "camldebug" (interactive) "Debug caml mode")
 
 
-(add-to-list 'load-path (concat elisp-dir "slime"))
-(require 'slime)
+;; (add-to-list 'load-path (concat elisp-dir "slime"))
+;; (require 'slime)
 
-(add-to-list 'load-path (concat elisp-dir "clojure-mode"))
-(require 'clojure-mode)
+;; (add-to-list 'load-path (concat elisp-dir "clojure-mode"))
+;; (require 'clojure-mode)
 
-(add-to-list 'auto-mode-alist '("\\.S\\'" . gas-mode))
-(require 'gas-mode)
+;; (add-to-list 'auto-mode-alist '("\\.S\\'" . gas-mode))
+;; (require 'gas-mode)
 
 
 (add-hook 'emacs-lisp-mode-hook
@@ -144,19 +161,21 @@
             (flyspell-prog-mode)
             (define-key emacs-lisp-mode-map [f5] 'eval-buffer)
             ))
-
 (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
 
 (add-to-list 'load-path "~/emacs/color-theme/")
-;;(if-emacs-app ;;I’m not sure why my color theme breaks in Terminal.app, but I don't feel like working on it now
-;; (with-library 'color-theme
-;;   (color-theme-initialize)
-;;   (setq color-theme-is-global t)
-;;   (color-theme-espresso)
-;;   )
+(add-to-list 'load-path "~/emacs/color-themes/")
+(with-loaded-file (concat elisp-dir "color-themes/color-theme-solarized.el") ())
+;; ;;  (require )  
+;; ;;(if-emacs-app ;;I’m not sure why my color theme breaks in Terminal.app, but I don't feel like working on it now
+;; ;; (with-library 'color-theme
+;; ;;   (color-theme-initialize)
+;; ;;   (setq color-theme-is-global t)
+;; ;;   (color-theme-espresso)
+;; ;;   )
 
- 
-(server-start)
+(when (and (functionp 'server-running-p) (not (server-running-p)))
+  (server-start))
 (add-hook 'server-switch-hook
           (lambda ()
 
@@ -180,132 +199,126 @@
                               (kill-buffer nil)
                               (delete-frame)))
 
-;; (define-key osx-key-mode-map (kbd "A-/") 'comment-or-uncomment-region-or-line)
+;; ;; (define-key osx-key-mode-map (kbd "A-/") 'comment-or-uncomment-region-or-line)
 
-;;(autoload 'css2-mode "~/emacs/elisp/css2-mode" "Mode for editing CSS files" t)
-;;(add-to-list 'auto-mode-alist '("\\.css$" . css2-mode))
+;; ;;(autoload 'css2-mode "~/emacs/elisp/css2-mode" "Mode for editing CSS files" t)
+;; ;;(add-to-list 'auto-mode-alist '("\\.css$" . css2-mode))
 
-(global-set-key '[(f5)] 'call-last-kbd-macro)
-(global-set-key (kbd "C-j") 'flyspell-check-previous-highlighted-word)
-(global-set-key (kbd "C-c j") 'flyspell-check-previous-highlighted-word)
+;; (global-set-key '[(f5)] 'call-last-kbd-macro)
+;; (global-set-key (kbd "C-j") 'flyspell-check-previous-highlighted-word)
+;; (global-set-key (kbd "C-c j") 'flyspell-check-previous-highlighted-word)
 (global-set-key '[(f8)] 'flyspell-check-previous-highlighted-word)
 
-(add-to-list 'load-path (concat elisp-dir "ess/lisp"))
-(with-library 'ess-site)
+;; ;; (add-to-list 'load-path "~/emacs/company")
+;; ;; (autoload 'company-mode "company" nil t)
 
-;; (add-to-list 'load-path "~/emacs/company")
-;; (autoload 'company-mode "company" nil t)
+;; (define-key comint-mode-map [up] 'comint-previous-matching-input-from-input)
+;; (define-key comint-mode-map [down] 'comint-next-matching-input-from-input)
 
-(autoload 'whitespace-mode "whitespace" "Toggle whitespace visualization." t)
-
-(define-key comint-mode-map [up] 'comint-previous-matching-input-from-input)
-(define-key comint-mode-map [down] 'comint-next-matching-input-from-input)
-
-(add-to-list 'load-path elisp-dir)
+;; (add-to-list 'load-path elisp-dir)
   
-(autoload 'js2-mode "js2" nil t)
-(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-(setq js2-highlight-level 3
-      js2-basic-offset 4
-      js2-use-font-lock-faces t
-      js2-bounce-indent-p t
-      js2-enter-indents-newline t)
+;; (autoload 'js2-mode "js2" nil t)
+;; (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+;; (setq js2-highlight-level 3
+;;       js2-basic-offset 4
+;;       js2-use-font-lock-faces t
+;;       js2-bounce-indent-p t
+;;       js2-enter-indents-newline t)
 
-;; (add-to-list 'load-path (concat elisp-dir "auto-complete"))
-;; (require 'auto-complete-config)
-;; (add-to-list 'ac-dictionary-directories (concat elisp-dir "auto-complete/ac-dict"))
-;; (ac-config-default)
+;; ;; (add-to-list 'load-path (concat elisp-dir "auto-complete"))
+;; ;; (require 'auto-complete-config)
+;; ;; (add-to-list 'ac-dictionary-directories (concat elisp-dir "auto-complete/ac-dict"))
+;; ;; (ac-config-default)
 
 (require 'ido) ;; Improved file selection and buffer switching
 (ido-mode t)
 (setq
- ido-ignore-buffers                     ; ignore these guys
- '("\\` " "^\*Mess" "^\*Back" ".*Completion" "^\*Ido")
- ido-work-directory-list '("~/" "~/Desktop")
- ido-case-fold  t                       ; be case-insensitive
- ido-use-filename-at-point nil ; don't use filename at point (annoying)
- ido-use-url-at-point nil         ;  don't use url at point (annoying)
- ido-enable-flex-matching t             ; be flexible
- ido-max-prospects 6                    ; don't spam my minibuffer
- ido-confirm-unique-completion t) ; wait for RET, even with unique completion
+  ido-ignore-buffers                     ; ignore these guys
+  '("\\` " "^\*Mess" "^\*Back" ".*Completion" "^\*Ido")
+  ido-work-directory-list '("~/" "~/Desktop")
+  ido-case-fold  t                       ; be case-insensitive
+  ido-use-filename-at-point nil ; don't use filename at point (annoying)
+  ido-use-url-at-point nil         ;  don't use url at point (annoying)
+  ido-enable-flex-matching t             ; be flexible
+  ido-max-prospects 6                    ; don't spam my minibuffer
+  ido-confirm-unique-completion t) ; wait for RET, even with unique completion
 
-;; Support for html5 in nxml mode.
-;; See http://github.com/hober/html5-el/tree/master
-(add-to-list 'load-path (concat elisp-dir "html5-el/"))
-(eval-after-load "rng-loc"
-  '(add-to-list 'rng-schema-locating-files (concat elisp-dir "html5-el/schemas.xml")))
-(with-library 'whattf-dt)
-
-
-;; nxhml (HTML ERB template support)
-(if-emacs-app
-(with-loaded-file (concat elisp-dir "nxhtml/autostart.el")
-  (setq
-   nxhtml-global-minor-mode t
-   mumamo-chunk-coloring 'submode-colored
-   nxhtml-skip-welcome t
-   indent-region-mode t
-   rng-nxml-auto-validate-flag nil
-   nxml-degraded t)
-  (add-to-list 'auto-mode-alist '("\\.rhtml\\'" . eruby-html-mumamo))
-  (add-to-list 'auto-mode-alist '("\\.html\\.erb\\'" . eruby-nxhtml-mumamo-mode))
-  (add-to-list 'auto-mode-alist '("\\.html\\.mako\\'" .  mako-html-mumamo-mode)))
-)
-
-(add-hook 'nXhtml-mode-hook
-          (lambda ()
-            (turn-on-visual-line-mode)
-            ))
-
-(add-hook 'eruby-nxhtml-mumamo-mode-hook (lambda ()
-    (flyspell-prog-mode)
-    (visual-line-mode t) ;;eruby-html-mumamo-mode-map 
-    (define-key nxhtml-tag-map (kbd "M-{") "”"))
-;;    (define-key nxhtml-tag-map (kbd "M-}") "’")
-    )
-;; (add-to-list 'load-path (concat elisp-dir "zencoding/"))
-;; (with-library 'zencoding-mode
-;;  (add-hook 'sgml-mode-hook 'zencoding-mode) ;; Auto-start on any markup modes
-;;  (add-hook 'eruby-nxhtml-mumamo-mode 'zencoding-mode)
-;;)
+;; ;; Support for html5 in nxml mode.
+;; ;; See http://github.com/hober/html5-el/tree/master
+;; (add-to-list 'load-path (concat elisp-dir "html5-el/"))
+;; (eval-after-load "rng-loc"
+;;   '(add-to-list 'rng-schema-locating-files (concat elisp-dir "html5-el/schemas.xml")))
+;; (with-library 'whattf-dt)
 
 
+;; ;; nxhml (HTML ERB template support)
+;; (if-emacs-app
+;; (with-loaded-file (concat elisp-dir "nxhtml/autostart.el")
+;;   (setq
+;;    nxhtml-global-minor-mode t
+;;    mumamo-chunk-coloring 'submode-colored
+;;    nxhtml-skip-welcome t
+;;    indent-region-mode t
+;;    rng-nxml-auto-validate-flag nil
+;;    nxml-degraded t)
+;;   (add-to-list 'auto-mode-alist '("\\.rhtml\\'" . eruby-html-mumamo))
+;;   (add-to-list 'auto-mode-alist '("\\.html\\.erb\\'" . eruby-nxhtml-mumamo-mode))
+;;   (add-to-list 'auto-mode-alist '("\\.html\\.mako\\'" .  mako-html-mumamo-mode)))
+;; )
 
-;; Auto-indent pasted code. Figure out how to make this work with cmnd-v also
-;;   (dolist (command '(yank yank-pop))
-;;     (eval `(defadvice ,command (after indent-region activate)
-;;              (and (not current-prefix-arg)
-;;                   (member major-mode '(emacs-lisp-mode lisp-mode
-;;                                                        clojure-mode    scheme-mode
-;;                                                        haskell-mode    ruby-mode
-;;                                                        rspec-mode      python-mode
-;;                                                        c-mode          c++-mode
-;;                                                        objc-mode       latex-mode
-;;                                                        plain-tex-mode))
-;;                   (let ((mark-even-if-inactive transient-mark-mode))
-;;                     (indent-region (region-beginning) (region-end) nil))))))
+;; (add-hook 'nXhtml-mode-hook
+;;           (lambda ()
+;;             (turn-on-visual-line-mode)
+;;             ))
 
-(add-hook 'python-mode-hook (lambda () (flyspell-prog-mode)))
+;; (add-hook 'eruby-nxhtml-mumamo-mode-hook (lambda ()
+;;     (flyspell-prog-mode)
+;;     (visual-line-mode t) ;;eruby-html-mumamo-mode-map 
+;;     (define-key nxhtml-tag-map (kbd "M-{") "”"))
+;; ;;    (define-key nxhtml-tag-map (kbd "M-}") "’")
+;;     )
+;; ;; (add-to-list 'load-path (concat elisp-dir "zencoding/"))
+;; ;; (with-library 'zencoding-mode
+;; ;;  (add-hook 'sgml-mode-hook 'zencoding-mode) ;; Auto-start on any markup modes
+;; ;;  (add-hook 'eruby-nxhtml-mumamo-mode 'zencoding-mode)
+;; ;;)
 
-(add-hook 'css-mode-hook (lambda ()
-                      (flyspell-prog-mode)
-                      (set-newline-and-indent)
-                      ))
 
-(add-hook 'js2-mode-hook (lambda () (flyspell-prog-mode)))
+;; ;; Auto-indent pasted code. Figure out how to make this work with cmnd-v also
+;; ;;   (dolist (command '(yank yank-pop))
+;; ;;     (eval `(defadvice ,command (after indent-region activate)
+;; ;;              (and (not current-prefix-arg)
+;; ;;                   (member major-mode '(emacs-lisp-mode lisp-mode
+;; ;;                                                        clojure-mode    scheme-mode
+;; ;;                                                        haskell-mode    ruby-mode
+;; ;;                                                        rspec-mode      python-mode
+;; ;;                                                        c-mode          c++-mode
+;; ;;                                                        objc-mode       latex-mode
+;; ;;                                                        plain-tex-mode))
+;; ;;                   (let ((mark-even-if-inactive transient-mark-mode))
+;; ;;                     (indent-region (region-beginning) (region-end) nil))))))
+
+;; (add-hook 'python-mode-hook (lambda () (flyspell-prog-mode)))
+
+;; (add-hook 'css-mode-hook (lambda ()
+;;                       (flyspell-prog-mode)
+;;                       (set-newline-and-indent)
+;;                       ))
+
+;; (add-hook 'js2-mode-hook (lambda () (flyspell-prog-mode)))
 (add-hook 'emacs-lisp-mode (lambda () (flyspell-prog-mode)))
   
-(add-hook 'ruby-mode-hook (lambda ()
-                         ;;   (flyspell-prog-mode)
-                            (set-newline-and-indent)
-                            (message "jonshea ruby mode")
-                            ))
+;; (add-hook 'ruby-mode-hook (lambda ()
+;;                          ;;   (flyspell-prog-mode)
+;;                             (set-newline-and-indent)
+;;                             (message "jonshea ruby mode")
+;;                             ))
 
-(setq ruby-mode-hook nil)
+;; (setq ruby-mode-hook nil)
 
-;; (with-library 'ruby-block
-;;   (ruby-block-mode t)
-;;   (setq ruby-block-highlight-toggle t))
+;; ;; (with-library 'ruby-block
+;; ;;   (ruby-block-mode t)
+;; ;;   (setq ruby-block-highlight-toggle t))
 
 (add-to-list 'load-path (concat elisp-dir "yaml"))
 (with-library 'yaml-mode
@@ -317,50 +330,50 @@
 (setq-default ispell-program-name "aspell")
 (setq-default ispell-program-name "/usr/local/bin/aspell")
 
-(add-to-list 'load-path (concat elisp-dir "yasnippet"))
-(require 'yasnippet)
-;;  (setq yas/root-directory "~/emacs/yasnippet/snippets/")
-;;  (add-to-list 'yas/extra-mode-hooks 'ruby-mode-hook)
-;;  (yas/load-directory yas/root-directory)
-(yas/initialize)
-(yas/load-directory  "~/emacs/yasnippet/snippets")
+;; (add-to-list 'load-path (concat elisp-dir "yasnippet"))
+;; (require 'yasnippet)
+;; ;;  (setq yas/root-directory "~/emacs/yasnippet/snippets/")
+;; ;;  (add-to-list 'yas/extra-mode-hooks 'ruby-mode-hook)
+;; ;;  (yas/load-directory yas/root-directory)
+;; (yas/initialize)
+;; (yas/load-directory  "~/emacs/yasnippet/snippets")
   
-(load-library "paren")
+;; (load-library "paren")
   
-;;  (autoload 'whizzytex-mode "/Users/jonshea/emacs/whizzytex/whizzytex" "WhizzyTeX, a minor-mode WYSIWYG environment for LaTeX" t) 
-;;  (setq-default whizzy-viewers '(("-skim" "skim")))
-;; (add-hook 'LaTeX-mode-hook (lambda ()
-;; 			     (TeX-fold-mode 1)))
-;; (autoload 'whizzytex-mode
-;;   "whizzytex"
-;;   "WhizzyTeX, a minor-mode WYSIWIG environment for LaTeX" t)
+;; ;;  (autoload 'whizzytex-mode "/Users/jonshea/emacs/whizzytex/whizzytex" "WhizzyTeX, a minor-mode WYSIWYG environment for LaTeX" t) 
+;; ;;  (setq-default whizzy-viewers '(("-skim" "skim")))
+;; ;; (add-hook 'LaTeX-mode-hook (lambda ()
+;; ;; 			     (TeX-fold-mode 1)))
+;; ;; (autoload 'whizzytex-mode
+;; ;;   "whizzytex"
+;; ;;   "WhizzyTeX, a minor-mode WYSIWIG environment for LaTeX" t)
 
-(add-to-list 'load-path "/opt/local/share/emacs/site-lisp/auctex" t)
-(with-library 'tex-site)
-;;(load "/opt/local/share/emacs/site-lisp/auctex.el" nil t t)
-;;(add-to-list 'TeX-command-list '("pdflatex" "/opt/local/bin/pdflatex %s" PDFLaTeX t t :help "Run pdflatex") t)
-;;(add-hook 'LaTeX-mode-hook 'visual-line-mode)
-;;(setq TeX-engine "")
-(setq TeX-newline-function 'newline-and-indent)
-(add-hook 'LaTeX-mode-hook (lambda() (
-          TeX-PDF-mode
-          visual-line-mode
-          LaTeX-math-mode
-          )))
+;; (add-to-list 'load-path "/opt/local/share/emacs/site-lisp/auctex" t)
+;; (with-library 'tex-site)
+;; ;;(load "/opt/local/share/emacs/site-lisp/auctex.el" nil t t)
+;; ;;(add-to-list 'TeX-command-list '("pdflatex" "/opt/local/bin/pdflatex %s" PDFLaTeX t t :help "Run pdflatex") t)
+;; ;;(add-hook 'LaTeX-mode-hook 'visual-line-mode)
+;; ;;(setq TeX-engine "")
+;; (setq TeX-newline-function 'newline-and-indent)
+;; (add-hook 'LaTeX-mode-hook (lambda() (
+;;           TeX-PDF-mode
+;;           visual-line-mode
+;;           LaTeX-math-mode
+;;           )))
           
-(setq interprogram-cut-function nil)
-(setq interprogram-paste-function nil)
-(defun paste-from-pasteboard ()
-  (interactive)
-  (and mark-active (filter-buffer-substring (region-beginning) (region-end) t))
-  (insert (ns-get-pasteboard))
-  )
-(defun copy-to-pasteboard (p1 p2)
-  (interactive "r*")
-  (ns-set-pasteboard (buffer-substring p1 p2))
-  (message "Copied selection to pasteboard")
-  )
-(defun cut-to-pasteboard (p1 p2) (interactive "r*") (ns-set-pasteboard (filter-buffer-substring p1 p2 t)) )
-(global-set-key (kbd "s-v") 'paste-from-pasteboard)
-(global-set-key (kbd "s-c") 'copy-to-pasteboard)
-(global-set-key (kbd "s-x") 'cut-to-pasteboard)
+;; (setq interprogram-cut-function nil)
+;; (setq interprogram-paste-function nil)
+;; (defun paste-from-pasteboard ()
+;;   (interactive)
+;;   (and mark-active (filter-buffer-substring (region-beginning) (region-end) t))
+;;   (insert (ns-get-pasteboard))
+;;   )
+;; (defun copy-to-pasteboard (p1 p2)
+;;   (interactive "r*")
+;;   (ns-set-pasteboard (buffer-substring p1 p2))
+;;   (message "Copied selection to pasteboard")
+;;   )
+;; (defun cut-to-pasteboard (p1 p2) (interactive "r*") (ns-set-pasteboard (filter-buffer-substring p1 p2 t)) )
+;; (global-set-key (kbd "s-v") 'paste-from-pasteboard)
+;; (global-set-key (kbd "s-c") 'copy-to-pasteboard)
+;; (global-set-key (kbd "s-x") 'cut-to-pasteboard)

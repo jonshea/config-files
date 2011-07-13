@@ -1,9 +1,12 @@
 export PATH=~/bin:/usr/local/sbin:/usr/local/bin:$PATH
-export GIT_EXTERNAL_DIFF=git-external-chdiff
 
 export GOROOT=~/projects/go-lang/
 export GOOS=darwin
 export GOARCH=amd64
+
+export JAVA_HOME=$(test -f /usr/libexec/java_home &&/usr/libexec/java_home)
+export AWS_IAM_HOME="/usr/local/Cellar/aws-iam-tools/HEAD/jars"
+export AWS_CREDENTIAL_FILE=$HOME/.aws/aws-credentials-master
 
 export PYTHONSTARTUP=/Users/jonshea/.pythonstartup.py
 export PYTHONDONTWRITEBYTECODE=1
@@ -34,11 +37,14 @@ function test_and_source {
 
 export CONFIGS_DIR=~/config-files
 
+RVM_PATH=/usr/local/rvm
+test_and_source $RVM_PATH/rvm/scripts/rvm
+
 ## Aliases in seperate file
 test_and_source $CONFIGS_DIR/.bash_aliases
 
 # Bash completion is the best
-export BASH_COMPLETION=$CONFIGS_DIR/bash-completion/bash_completion
+export BASH_COMPLETION=$(brew --prefix)/etc/bash_completion
 export BASH_COMPLETION_DIR=/usr/local/etc/bash_completion.d
 test_and_source $BASH_COMPLETION
 test_and_source $CONFIGS_DIR/ruby-completion/completion-ruby-all
