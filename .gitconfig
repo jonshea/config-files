@@ -1,12 +1,12 @@
 [user]
   name = Jon Shea
-  email = jonshea@foursquare.com
+  email = wotd@alum.dartmouth.org
 [alias]
   ## I often do something like 'git git status', wouldn't it be cool if
   ## that just worked?
   git = !git
   patch = !(git diff HEAD~ HEAD --no-ext-diff) > ~/Desktop/$(git rev-parse --short HEAD).patch
-  lastweek = !git log --committer=jonshea --no-prefix --simplify-merges --reverse --since='1 week ago'
+  lastweek = !git log --committer=jonshea --no-prefix --simplify-merges --reverse --since='8 days ago'
 [branch]
   autosetuprebase = always
 [branch "master"]
@@ -14,13 +14,23 @@
   merge = refs/heads/master
 [core]
   excludesfile = /Users/jonshea/.gitexcludes
+  quotepath = false
 [color]
   ui = true
+[push]
+  default = tracking
 [difftool "Kaleidoscope"]
-  cmd = ksdiff-wrapper git \"$LOCAL\" \"$REMOTE\"
+  cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 [difftool]
   prompt = false
 [diff]
   tool = Kaleidoscope
-[push]
-  default = matching
+[grep]
+  lineNumber = true
+[mergetool "Kaleidoscope"]
+  cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+  trustExitCode = true
+[mergetool]
+  prompt = false
+[merge]
+  tool = Kaleidoscope

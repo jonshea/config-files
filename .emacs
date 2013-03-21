@@ -1,3 +1,24 @@
+(defun camelcase  (s)
+  "Converts underscore to camelCase. FIXME: Will incorrectly capitalize '_foo'."
+  (let ((l (split-string s "_")))
+    (if (cdr l)
+        (concat (car l) (mapconcat 'capitalize (cdr l) ""))
+      (car l)
+      )))
+
+(defun camelcase-word-at-point ()
+  "There's probably a one-liner for this..."
+  (interactive)
+  (let* ((bounds (bounds-of-thing-at-point 'symbol))
+         (p1 (car bounds))
+         (p2 (cdr bounds))
+         (s (delete-and-extract-region p1 p2)))
+    (message s)
+    (insert (camelcase s))))
+
+(camelcase "twitter_name")
+
+
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 (defvar home-dir ""
@@ -19,24 +40,43 @@
 (add-to-list 'exec-path "/usr/local/bin")
 (add-to-list 'exec-path "/Users/jonshea/foursquare.web")
 (add-to-list 'exec-path ".")
-(add-to-list 'load-path (concat elisp-dir "scala"))
-(require 'scala-mode-auto)
-(add-to-list 'load-path (concat elisp-dir "ensime/elisp"))
-(require 'ensime)
-(setq ensime-sbt-program-name "./sbt.py") ;; figure out a better way to do this
+(cond ((>= emacs-major-version 24)
+       (add-to-list 'load-path (concat elisp-dir "scala-mode2"))
+       (require 'scala-mode2))
+      (t
+       (add-to-list 'load-path (concat elisp-dir "scala")) 
+       (require 'scala-mode-auto)))
+
+;; (add-to-list 'load-path (concat elisp-dir "scala"))
+;;(require 'scala-mode-auto)
+;; (add-to-list 'load-path (concat elisp-dir "scala-mode2"))
+;; (require 'scala-mode)
+(add-to-list 'load-path (concat elisp-dir "markdown-mode"))
+(autoload 'markdown-mode "markdown-mode"
+     "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+(add-hook 'markdown-mode-hook
+          (lambda ()
+            (flyspell-mode)
+            (visual-line-mode t)
+            ))
+
+
+
+
 (add-hook 'scala-mode-hook
 	  (lambda ()
-	    (ensime-scala-mode-hook)
-        (local-set-key [return]
-                       '(lambda () (interactive)
-                          (setq last-command nil)
-                          (newline-and-indent)))
-	    (flyspell-prog-mode)
-	  ))
+	    (local-set-key [return]
+			   '(lambda ()
+			      (interactive)
+			      (newline-and-indent)
+			      (scala-indent:insert-asterisk-on-multiline-comment)))
+	    (flyspell-prog-mode)))
 
 (setq
  change-log-default-name "ChangeLog"
  default-major-mode 'text-mode
+ default-truncate-lines t
  display-time-24hr-format t
  flyspell-issue-message-flag nil
  frame-title-format '(buffer-file-name "%f" ("%b"))
@@ -46,6 +86,9 @@
  kill-whole-line t
  mac-option-modifier 'meta
  make-backup-files nil
+ mouse-wheel-progressive-speed t
+ mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil))
+ mouse-yank-at-point nil
  query-replace-highlight t
  require-final-newline t
  scroll-step 1
@@ -55,13 +98,13 @@
  transient-mark-mode t
  user-full-name "Jon Shea"
  vc-follow-symlinks t
- default-truncate-lines t
  )
 (setq-default 
  indent-tabs-mode nil
  tab-width 4
  save-place t)
 
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (global-font-lock-mode t)
 (setq font-lock-maximum-decoration t)
 (line-number-mode 1)
@@ -88,14 +131,21 @@
 ;; ;;         (:name
          
 
-;; ;; (el-get 'sync '(color-theme-solarized js2-mode yaml-mode color-theme emacs-textmate scala-mode))
+;; ;; (el-get 'sync '( js2-mode yaml-mode color-theme emacs-textmate scala-mode))
 ;; ;; (el-get 'wait)
+
+
+(add-to-list 'load-path (concat elisp-dir "soy-mode"))
+(autoload 'soy-mode "soy-mode" "soy-mode")
+(add-to-list 'auto-mode-alist '("\\.soy$" . soy-mode))
+
+(add-to-list 'auto-mode-alist '("\\.soy$" . soy-mode))
 
 (set-face-attribute 'default nil :height 110 :family "menlo")
 
 ;; ;; I'm hardcore. I search with regexp
-;; (global-set-key (kbd "C-s") 'isearch-forward-regexp)
-;; (global-set-key (kbd "C-r") 'isearch-backward-regexp)
+(global-set-key (kbd "C-s") 'isearch-forward-regexp)
+(global-set-key (kbd "C-r") 'isearch-backward-regexp)
 ;; (global-set-key [f1] 'tall-window)
 ;; ;;(define-key isearch-mode-map (kbd "C-r") 'isearch-repeat-backward)
 ;; ;; Write an isearch-mode-map binding for the arrow keys
@@ -114,6 +164,7 @@
   "Minor mode that defines all of my favorite key bindings."
 ;;  :lighter "jk"
   :global t
+  (define-key jcs-keys-mode-map [f6] `camelcase-word-at-point)
   (define-key jcs-keys-mode-map (kbd "M-[") "“")
   (define-key jcs-keys-mode-map (kbd "M-{") "”")
   (define-key jcs-keys-mode-map (kbd "M-]") "‘")
@@ -151,8 +202,8 @@
 ;; (add-to-list 'load-path (concat elisp-dir "clojure-mode"))
 ;; (require 'clojure-mode)
 
-;; (add-to-list 'auto-mode-alist '("\\.S\\'" . gas-mode))
-;; (require 'gas-mode)
+(add-to-list 'auto-mode-alist '("\\.S\\'" . gas-mode))
+(require 'gas-mode)
 
 
 (add-hook 'emacs-lisp-mode-hook
@@ -165,7 +216,6 @@
 
 (add-to-list 'load-path "~/emacs/color-theme/")
 (add-to-list 'load-path "~/emacs/color-themes/")
-(with-loaded-file (concat elisp-dir "color-themes/color-theme-solarized.el") ())
 ;; ;;  (require )  
 ;; ;;(if-emacs-app ;;I’m not sure why my color theme breaks in Terminal.app, but I don't feel like working on it now
 ;; ;; (with-library 'color-theme
@@ -319,6 +369,14 @@
 ;; ;; (with-library 'ruby-block
 ;; ;;   (ruby-block-mode t)
 ;; ;;   (setq ruby-block-highlight-toggle t))
+
+(add-to-list 'load-path (concat elisp-dir "thrift"))
+(autoload 'thrift-mode "thrift-mode" "thrift-mode")
+(add-to-list 'auto-mode-alist '("\\.thrift$" . thrift-mode))
+
+(add-to-list 'auto-mode-alist '("BUILD$" . python-mode))
+(add-to-list 'auto-mode-alist '("\\.m$" . octave-mode))
+
 
 (add-to-list 'load-path (concat elisp-dir "yaml"))
 (with-library 'yaml-mode

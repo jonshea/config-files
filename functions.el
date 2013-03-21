@@ -57,13 +57,13 @@ is a comment, uncomment."
     (interactive)
       (indent-region (point-min) (point-max)))
 
-(defun tall-window ()
-  "Maximize the window vertically without changing the width."
-  (interactive)
-  (set-frame-position (selected-frame)
-                      (frame-parameter (selected-frame) 'left)
-                       0)
-  (set-frame-height (selected-frame) 1000))
+;; (defun tall-window ()
+;;   "Maximize the window vertically without changing the width."
+;;   (interactive)
+;;   (set-frame-position (selected-frame)
+;;                       (frame-parameter (selected-frame) 'left)
+;;                        0)
+;;   (set-frame-height (selected-frame) 1000))
 
 
 ;; (defun indent-or-expand (arg)

@@ -1,10 +1,12 @@
 export PATH=~/bin:/usr/local/sbin:/usr/local/bin:$PATH
 
+export ARCHFLAGS="-arch x86_64"
 export GOROOT=~/projects/go-lang/
 export GOOS=darwin
 export GOARCH=amd64
 
-export JAVA_HOME=$(test -f /usr/libexec/java_home &&/usr/libexec/java_home)
+export JAVA_HOME=$(test -f /usr/libexec/java_home && /usr/libexec/java_home)
+## export JAVA_HOME=$(test -f /usr/libexec/java_home && /usr/libexec/java_home -v 1.6.0)
 export AWS_IAM_HOME="/usr/local/Cellar/aws-iam-tools/HEAD/jars"
 export AWS_CREDENTIAL_FILE=$HOME/.aws/aws-credentials-master
 

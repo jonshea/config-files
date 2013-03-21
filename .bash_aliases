@@ -1,27 +1,17 @@
 alias ls="ls -Ah -F -G"
 ## --group-directories-first --color=auto"
 
-alias solr="java -Dsolr.solr.home=solr -jar start.jar"
-alias ec="emacsclient -n"
-alias py=python
+alias scala="scala -Dfile.encoding=UTF-8 -deprecation"
+alias kill_sbt="ps ax | grep sbt | grep -v grep | cut -d' ' -f2 | xargs kill -9"
+
+alias sbt="/Users/jonshea/projects/sbt-extras/sbt"
 
 alias less="less -R"
-alias updatedb='sudo /usr/libexec/locate.updatedb'
-alias idl='/Applications/rsi/idl/bin/idl'
-alias emacs="emacs -nw"
-alias hosts="sudo emacs /etc/hosts; dscacheutil -flushcache"
-alias ipaddr="ifconfig en1 | awk '$2~/[0-9]+\./{print$2}'"
 alias grep="grep -E --color=auto"
 
 (which rlwrap > /dev/null) && alias ocaml="rlwrap ocaml"
 
 alias new_password="apg -t -a 0 -M sNcl -n 6 -x 10 -m 8 -s"
 
-alias backup_research="rsync -avz /Users/jonshea/research/ jonshea.strongspace.com\:/home/jonshea/backup/research"
-
-# Csh compatability:
-#
-alias unsetenv=unset
-function setenv () {
-  export $1="$2"
-}
+alias oiddate="python -c \"import struct;import sys;import datetime;print(datetime.datetime.ytcfromtimestamp(struct.unpack('>i', sys.argv[1].decode('hex')[0:4])[0]))\""
+alias makeoid="python -c \"import sys; import struct; import calendar; import dateutil.parser; print (struct.pack('>i', int(calendar.timegm(dateutil.parser.parse(' '.join(sys.argv[1:])).timetuple()))) +  '\x00' * 8).encode('hex')\""

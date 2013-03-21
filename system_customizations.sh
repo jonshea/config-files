@@ -10,6 +10,9 @@ defaults write -g PMPrintingExpandedStateForPrint -bool TRUE
 # Show extended save dialog by default
 defaults write -g NSNavPanelExpandedStateForSaveMode -bool TRUE
 
+# Don’t use iCloud as the default save location
+defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
+
 # Show pull path in Finder window title bars
 defaults write com.apple.finder _FXShowPosixPathInTitle -bool YES
 killall Finder
@@ -37,3 +40,5 @@ gem sources -a http://gems.github.com
 
 ## Disable download quarantine
 defaults write com.apple.LaunchServices LSQuarantine -bool NO
+
+defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false

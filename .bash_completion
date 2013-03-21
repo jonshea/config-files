@@ -9,3 +9,4 @@ complete -f -X '!*.dvi' pdfdvim
 
 test -f ~/.git-completion && . ~/.git-completion
 test -f /usr/local/Library/Contributions/brew_bash_completion.sh && . /usr/local/Library/Contributions/brew_bash_completion.sh
+test -f ~/foursquare/web/build/phab/arcanist/resources/shell/bash-completion && source ~/foursquare/web/build/phab/arcanist/resources/shell/bash-completion
