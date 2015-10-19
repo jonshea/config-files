@@ -2,7 +2,7 @@ alias ls="ls -Ah -F -G"
 ## --group-directories-first --color=auto"
 
 alias scala="scala -Dfile.encoding=UTF-8 -deprecation"
-alias kill_sbt="ps ax | grep sbt | grep -v grep | cut -d' ' -f2 | xargs kill -9"
+kill_sbt() { "pkill -l "$@" sbt" }
 
 alias sbt="/Users/jonshea/projects/sbt-extras/sbt"
 
