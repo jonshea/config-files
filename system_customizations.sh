@@ -31,6 +31,7 @@ defaults write com.apple.iTunes disablePingSidebar -bool TRUE
 
 ## Make it so that when you copy an address out of Mail.app it doesn't copy the name
 defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool NO
+
 ## Enable Mail.app plugins
 defaults write com.apple.mail EnableBundles -bool true
 defaults write com.apple.mail BundleCompatibilityVersion 3
@@ -41,4 +42,3 @@ gem sources -a http://gems.github.com
 ## Disable download quarantine
 defaults write com.apple.LaunchServices LSQuarantine -bool NO
 
-defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false
