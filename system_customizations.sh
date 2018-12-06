@@ -1,7 +1,6 @@
 ## Dock customizations
 defaults write com.apple.dashboard mcx-disabled -boolean YES # Disable Dashboard
 defaults write com.apple.Dock showhidden -bool YES # Make icons of hidden aps semi-transparent in the dock
-defaults write com.apple.screencapture type png # screenshots
 killall Dock
 
 # Show extended print dialog by default
@@ -23,6 +22,8 @@ defaults write com.apple.itunes show-store-arrow-links -bool FALSE # turn off iT
 defaults write com.apple.iTunes hide-ping-dropdown -bool TRUE
 defaults write com.apple.iTunes disablePingSidebar -bool TRUE
 
+defaults write com.apple.Safari IncludeInternalDebugMenu 1
+
 ## Set cmd-V to "Paste and Match Style"
 # defaults write .GlobalPreferences -dict-add NSUserKeyEquivalents “Paste and Match Style” -string “@v”
 
@@ -41,4 +42,5 @@ gem sources -a http://gems.github.com
 ## Disable download quarantine
 defaults write com.apple.LaunchServices LSQuarantine -bool NO
 
-defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false
+## Disable mouse acceleration, according to Cameron Mulhern
+defaults write NSGlobalDomain com.apple.mouse.scaling -1

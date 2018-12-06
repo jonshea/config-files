@@ -9,12 +9,10 @@
   lastweek = !git log --committer=jonshea --no-prefix --simplify-merges --reverse --since='8 days ago'
 [branch]
   autosetuprebase = always
-[branch "master"]
-  remote = origin
-  merge = refs/heads/master
 [core]
   excludesfile = /Users/jonshea/.gitexcludes
   quotepath = false
+  untrackedCache = true
 [color]
   ui = true
 [push]
@@ -25,6 +23,7 @@
   prompt = false
 [diff]
   tool = Kaleidoscope
+	algorithm = patience
 [grep]
   lineNumber = true
 [mergetool "Kaleidoscope"]
