@@ -1,10 +1,12 @@
 set editing-mode emacs
-set show-all-if-ambiguous on
-set mark-symlinked-directories on
-set completion-ignore-case on
+set show-all-if-ambiguous on # Show completions on first tab press instead of second
+set mark-symlinked-directories on # When autocompleting symlinks to dirs, include a trailing `/`
+set completion-ignore-case on 
+set completion-map-case on
 set visible-stats on  # put / after directors, * after programs, etc
 
 ## Make up and down search history to match beginning of line
+## http://codeinthehole.com/writing/the-most-important-command-line-tip-incremental-history-searching-with-inputrc/
 "\e[A": history-search-backward
 "\e[B": history-search-forward
 "\e[C": forward-char 

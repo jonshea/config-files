@@ -44,3 +44,7 @@ defaults write com.apple.LaunchServices LSQuarantine -bool NO
 
 ## Disable mouse acceleration, according to Cameron Mulhern
 defaults write NSGlobalDomain com.apple.mouse.scaling -1
+
+## How to prevent .DS_Store file creation over network connections
+## https://support.apple.com/en-us/HT1629
+defaults write com.apple.desktopservices DSDontWriteNetworkStores true

@@ -1,8 +1,6 @@
 export PATH=~/bin:/usr/local/sbin:/usr/local/bin:$PATH
+export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 export JAVA_HOME=$(test -f /usr/libexec/java_home && /usr/libexec/java_home)
-
-export PYTHONSTARTUP=/Users/jonshea/.pythonstartup.py
-export PYTHONDONTWRITEBYTECODE=1
 
 export GOPATH="$HOME/code/go"
 export PATH=$PATH:$GOPATH/bin
@@ -12,10 +10,11 @@ export IGNOREEOF=1  # pressing Ctrl+D once will not exit Bash
 ## Open X11 for graphics (must be running already)
 export DISPLAY=:0.0
 
-export HISTSIZE=
-export HISTFILESIZE=
-export HISTIGNORE="&:ls:[bf]g:exit"
-export HISTCONTROL=erasedups	# causes all previous lines matching the current line to be removed from the history list before that line is saved
+export HISTSIZE=500000
+export HISTFILESIZE=100000
+export HISTIGNORE="&:ls:[bf]g:exit:history"
+export HISTCONTROL="erasedups:ignoreboth" # causes all previous lines matching the current line to be removed from the history list before that line is saved
+export HISTTIMEFORMAT='%F %T '
 
 export PAGER=less;
 ## export EDITOR=/Applications/Emacs.app/Contents/MacOS/bin/emacsclient
