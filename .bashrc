@@ -3,9 +3,8 @@
 # For bash, put stuff in ~/.bashrc, and make ~/.bash_profile source it.
 # For zsh, put stuff in ~/.zshrc, which is always executed.
 
-echo "This is .profile"
+echo "This is .bashrc"
 
-: <<'END'
 export PATH=~/bin:/usr/local/sbin:/usr/local/bin:$PATH
 export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 export JAVA_HOME=$(test -f /usr/libexec/java_home && /usr/libexec/java_home)
@@ -79,4 +78,3 @@ export PS1='\h:\W$(__git_ps1 " (%s)")\$ '
 ##export COMP_WORDBREAKS=${COMP_WORDBREAKS/\:/}
 
 export PATH="$HOME/.cargo/bin:$PATH"
-END
