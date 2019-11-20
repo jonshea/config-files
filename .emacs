@@ -18,11 +18,6 @@
 
 (camelcase "twitter_name")
 
-(setq frame-title-format
-      '((:eval (if (buffer-file-name)
-                   (abbreviate-file-name (buffer-file-name))
-                 "%b"))))
-
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -34,7 +29,8 @@
 (defvar elisp-dir "~/emacs/"
   "Directory of elisp files and packages.")
 
-(load "~/functions.el")
+(when (file-exists-p "~/functions.el")
+  (load "~/functions.el"))
 (add-to-list 'load-path (concat elisp-dir "elisp"))
 
 (prefer-coding-system 'utf-8-mac)
@@ -51,7 +47,7 @@
 ;;       (t
 ;;        (add-to-list 'load-path (concat elisp-dir "scala")) 
 ;;        (require 'scala-mode-auto)))
- 
+
 ;; (add-to-list 'load-path (concat elisp-dir "scala"))
 ;;(require 'scala-mode-auto)
 ;; (add-to-list 'load-path (concat elisp-dir "scala-mode2"))
@@ -84,6 +80,7 @@
  default-truncate-lines t
  display-time-24hr-format t
  flyspell-issue-message-flag nil
+ frame-title-format '(buffer-file-name "%f" ("%b"))
  ido-everywhere t
  indent-tabs-mode nil
  inhibit-startup-message t
@@ -135,16 +132,10 @@
 ;; ;;         (:name
          
 
-;; ;; (el-get 'sync '( js2-mode yaml-mode color-theme emacs-textmate scala-mode))
-;; ;; (el-get 'wait)
-
-
 (add-to-list 'load-path (concat elisp-dir "soy-mode"))
 (autoload 'soy-mode "soy-mode" "soy-mode")
-(add-hook 'soy-mode-hook
-          (lambda ()
-            (turn-on-visual-line-mode)
-            ))
+(add-to-list 'auto-mode-alist '("\\.soy$" . soy-mode))
+
 (add-to-list 'auto-mode-alist '("\\.soy$" . soy-mode))
 
 (set-face-attribute 'default nil :height 110 :family "menlo")
@@ -152,7 +143,6 @@
 ;; ;; I'm hardcore. I search with regexp
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
-(global-set-key [mouse-2] nil)
 ;; (global-set-key [f1] 'tall-window)
 ;; ;;(define-key isearch-mode-map (kbd "C-r") 'isearch-repeat-backward)
 ;; ;; Write an isearch-mode-map binding for the arrow keys
@@ -160,10 +150,10 @@
 ;; (require 'uniquify)
 ;; (setq-default uniquify-buffer-name-style 'post-forward-angle-brackets)
 
-(add-to-list 'load-path (concat elisp-dir "textmate"))
-(with-library 'textmate
-  (textmate-mode)
-  (setq *textmate-gf-exclude* "/\\/\\.|(\\/|^)(\\.|vendor|fixtures|tmp|log|build)($|\\/)|(\\.xcodeproj|\\.nib|\\.framework|\\.app|\\.pbproj|\\.pbxproj|\\.xcode|\\.xcodeproj|\\.bundle|\\.pyc|\\.class|\\.jar)$"))
+;; (add-to-list 'load-path (concat elisp-dir "textmate"))
+;; (with-library 'textmate
+;;   (textmate-mode)
+;;   (setq *textmate-gf-exclude* "/\\/\\.|(\\/|^)(\\.|vendor|fixtures|tmp|log|build)($|\\/)|(\\.xcodeproj|\\.nib|\\.framework|\\.app|\\.pbproj|\\.pbxproj|\\.xcode|\\.xcodeproj|\\.bundle|\\.pyc|\\.class|\\.jar)$"))
   
 (defvar jcs-keys-mode-map nil "Keymap for jcs-keys mode.")
 (setq jcs-keys-mode-map (make-sparse-keymap))
@@ -208,9 +198,6 @@
 
 ;; (add-to-list 'load-path (concat elisp-dir "clojure-mode"))
 ;; (require 'clojure-mode)
-
-;; (add-to-list 'auto-mode-alist '("\\.S\\'" . gas-mode))
-;; (require 'gas-mode)
 
 
 (add-hook 'emacs-lisp-mode-hook
@@ -365,28 +352,60 @@
 ;; (add-hook 'js2-mode-hook (lambda () (flyspell-prog-mode)))
 (add-hook 'emacs-lisp-mode (lambda () (flyspell-prog-mode)))
   
+;; (add-hook 'ruby-mode-hook (lambda ()
+;;                          ;;   (flyspell-prog-mode)
+;;                             (set-newline-and-indent)
+;;                             (message "jonshea ruby mode")
+;;                             ))
+
+;; (setq ruby-mode-hook nil)
+
+;; ;; (with-library 'ruby-block
+;; ;;   (ruby-block-mode t)
+;; ;;   (setq ruby-block-highlight-toggle t))
+
 (add-to-list 'load-path (concat elisp-dir "thrift"))
 (autoload 'thrift-mode "thrift-mode" "thrift-mode")
 (add-to-list 'auto-mode-alist '("\\.thrift$" . thrift-mode))
-
-(add-to-list 'load-path (concat elisp-dir "less-css-mode"))
-(autoload 'less-css-mode "less-css-mode" "less-css-mode")
-
 
 (add-to-list 'auto-mode-alist '("BUILD$" . python-mode))
 (add-to-list 'auto-mode-alist '("\\.m$" . octave-mode))
 
 
-(add-to-list 'load-path (concat elisp-dir "yaml"))
-(with-library 'yaml-mode
-  (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-  (add-hook 'yaml-mode-hook
-            (lambda ()
-               (define-key yaml-mode-map "\C-m" 'newline-and-indent))))
-
 ;; (setq-default ispell-program-name "aspell")
 ;; (setq-default ispell-program-name "/usr/local/bin/aspell")
 
+;; (add-to-list 'load-path (concat elisp-dir "yasnippet"))
+;; (require 'yasnippet)
+;; ;;  (setq yas/root-directory "~/emacs/yasnippet/snippets/")
+;; ;;  (add-to-list 'yas/extra-mode-hooks 'ruby-mode-hook)
+;; ;;  (yas/load-directory yas/root-directory)
+;; (yas/initialize)
+;; (yas/load-directory  "~/emacs/yasnippet/snippets")
+  
+;; (load-library "paren")
+  
+;; ;;  (autoload 'whizzytex-mode "/Users/jonshea/emacs/whizzytex/whizzytex" "WhizzyTeX, a minor-mode WYSIWYG environment for LaTeX" t) 
+;; ;;  (setq-default whizzy-viewers '(("-skim" "skim")))
+;; ;; (add-hook 'LaTeX-mode-hook (lambda ()
+;; ;; 			     (TeX-fold-mode 1)))
+;; ;; (autoload 'whizzytex-mode
+;; ;;   "whizzytex"
+;; ;;   "WhizzyTeX, a minor-mode WYSIWIG environment for LaTeX" t)
+
+;; (add-to-list 'load-path "/opt/local/share/emacs/site-lisp/auctex" t)
+;; (with-library 'tex-site)
+;; ;;(load "/opt/local/share/emacs/site-lisp/auctex.el" nil t t)
+;; ;;(add-to-list 'TeX-command-list '("pdflatex" "/opt/local/bin/pdflatex %s" PDFLaTeX t t :help "Run pdflatex") t)
+;; ;;(add-hook 'LaTeX-mode-hook 'visual-line-mode)
+;; ;;(setq TeX-engine "")
+;; (setq TeX-newline-function 'newline-and-indent)
+;; (add-hook 'LaTeX-mode-hook (lambda() (
+;;           TeX-PDF-mode
+;;           visual-line-mode
+;;           LaTeX-math-mode
+;;           )))
+          
 (setq interprogram-cut-function nil)
 (setq interprogram-paste-function nil)
 (defun paste-from-pasteboard ()

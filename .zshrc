@@ -15,9 +15,14 @@ export VISUAL=emacs
 
 export IGNOREEOF=1  # pressing Ctrl+D once should not exit the shell
 
+export LC_CTYPE=en_US.UTF-8 # Without this, arrow keys in emacs over ssh don’t work. Shrug.
+
 fpath=(/usr/local/share/zsh-completions $fpath)
 autoload -Uz compinit && compinit -u
 # brew install zsh git completions are in  /usr/local/share/zsh/site-functions, but zsh-completions seems to take care of it anyway?
+
+autoload -U select-word-style
+select-word-style bash
 
 ## History search
 export HISTFILE=${ZDOTDIR:-$HOME}/.zhistory
