@@ -17,6 +17,8 @@
   ui = true
 [push]
   default = tracking
+[grep]
+  lineNumber = true
 [difftool "Kaleidoscope"]
   cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 [difftool]
@@ -24,8 +26,6 @@
 [diff]
   tool = Kaleidoscope
 	algorithm = patience
-[grep]
-  lineNumber = true
 [mergetool "Kaleidoscope"]
   cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
   trustExitCode = true

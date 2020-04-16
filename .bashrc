@@ -35,11 +35,11 @@ PROMPT_COMMAND='history -a' # Write the history to disk whenever you display the
 export LC_CTYPE=en_US.UTF-8
 
 function test_and_source {
-##    (test -f "${1}" && source "${1}") || echo "Could not source: ${1}"
-    test -f "${1}" && source "${1}"
+    (test -f "${1}" && source "${1}") || echo "Could not source: ${1}"
+##    test -f "${1}" && source "${1}" && echo "sourced ${1}"
 }
 
-export CONFIGS_DIR=~/config-files
+CONFIGS_DIR=~/config-files
 
 ## RVM_PATH=/usr/local/rvm
 ## test_and_source $RVM_PATH/rvm/scripts/rvm
@@ -51,10 +51,6 @@ test_and_source $CONFIGS_DIR/.bash_aliases
 export BASH_COMPLETION=$(brew --prefix)/etc/bash_completion
 export BASH_COMPLETION_DIR=/usr/local/etc/bash_completion.d
 test_and_source $BASH_COMPLETION
-test_and_source $CONFIGS_DIR/ruby-completion/completion-ruby-all
-
-# ec2 support
-test_and_source .ec2/.ec2rc
 
 function gr {
     ## If the current working directory is inside of a git repository,

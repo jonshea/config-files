@@ -1,0 +1,6 @@
+echo "This is .zshrc.Darin"
+
+path+=('/Applications/Visual Studio Code.app/Contents/Resources/app/bin')
+path=('/usr/local/opt/ruby/bin' ~/.gem/ruby/2.6.0/bin $path)
+
+alias ls='ls -GFah'

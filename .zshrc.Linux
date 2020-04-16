@@ -1,0 +1,8 @@
+echo "This is .zshrc.Linux"
+
+alias ls='ls -GFah --color'
+alias code='emacs'
+
+ZSH_COMP_PATH="${CONFIGS_DIR}/zsh-completions/src"
+fpath=("${ZSH_COMP_PATH}" $fpath)
+

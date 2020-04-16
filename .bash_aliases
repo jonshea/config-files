@@ -1,3 +1,5 @@
+echo "This is .bash_aliases"
+
 alias ls="ls -Ah -F -G"
 ## --group-directories-first --color=auto"
 

@@ -2,13 +2,18 @@
 # https://htr3n.github.io/2018/07/faster-zsh/
 # 
 # 
+export CONFIGS_DIR=~/config-files
 
-export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+function test_and_source {
+    test -f "$1" && source "$1"
+}
+
+## Source platform specific code
+## Add test here? test -f "..." &&
+test_and_source "${CONFIGS_DIR}/.zshrc.$(uname)"
+test_and_source "${CONFIGS_DIR}/.zshrc.$(hostname)"
 
 export JAVA_HOME=$(test -f /usr/libexec/java_home && /usr/libexec/java_home)
-
-export GOPATH="$HOME/code/go"
-export PATH=$PATH:$GOPATH/bin
 
 export EDITOR=emacs
 export VISUAL=emacs
@@ -19,15 +24,15 @@ export LC_CTYPE=en_US.UTF-8 # Without this, arrow keys in emacs over ssh don’t
 
 fpath=(/usr/local/share/zsh-completions $fpath)
 autoload -Uz compinit && compinit -u
-# brew install zsh git completions are in  /usr/local/share/zsh/site-functions, but zsh-completions seems to take care of it anyway?
+# brew install zsh git completions are in /usr/local/share/zsh/site-functions, but zsh-completions seems to take care of it anyway.
 
 autoload -U select-word-style
 select-word-style bash
 
 ## History search
 export HISTFILE=${ZDOTDIR:-$HOME}/.zhistory
-bindkey '^[[A' up-line-or-search                                                
-bindkey '^[[B' down-line-or-search
+bindkey '^[[A' history-beginning-search-backward                                              
+bindkey '^[[B' history-beginning-search-forward
 
 HISTSIZE=10000000
 SAVEHIST=10000000
@@ -41,7 +46,6 @@ setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording en
 
 setopt AUTO_CD # treat `some/dir/here` as `cd some/dir/here`
 
-alias ls='ls -GFah'
 alias grep="grep -E --color=auto"
 alias emcas="emacs"
 
@@ -53,6 +57,10 @@ function gr {
 
     cd "$(git rev-parse --show-cdup)".
     pwd
+}
+
+function find_time_machine_exclusions {
+    mdfind "com_apple_backup_excludeItem = com.apple.backupd"
 }
 
 # export PS1='\h:\W$(__git_ps1 " (%s)")\$ '
