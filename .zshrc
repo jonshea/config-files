@@ -1,4 +1,4 @@
-## Notes:
+# Notes:
 # https://htr3n.github.io/2018/07/faster-zsh/
 # 
 # 
@@ -9,9 +9,9 @@ function test_and_source {
 }
 
 ## Source platform specific code
-## Add test here? test -f "..." &&
 test_and_source "${CONFIGS_DIR}/.zshrc.$(uname)"
 test_and_source "${CONFIGS_DIR}/.zshrc.$(hostname)"
+test_and_source "${CONFIGS_DIR}/.zshrc.private"
 
 export JAVA_HOME=$(test -f /usr/libexec/java_home && /usr/libexec/java_home)
 
@@ -42,6 +42,7 @@ setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicate entries first when trimming 
 setopt HIST_IGNORE_DUPS          # Don't record an entry that was just recorded again.
 setopt HIST_FIND_NO_DUPS         # Do not display a line previously found.
 setopt HIST_IGNORE_SPACE         # Don't record an entry starting with a space.
+# HISTORY_IGNORE="(select-window|select-pane|set -t)"
 setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording entry.
 
 setopt AUTO_CD # treat `some/dir/here` as `cd some/dir/here`
@@ -64,3 +65,13 @@ function find_time_machine_exclusions {
 }
 
 # export PS1='\h:\W$(__git_ps1 " (%s)")\$ '
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+path=($path $HOME/.rvm/bin)
+
+echo "start"
+test_and_source "${CONFIGS_DIR}/.zshrc.placed"
+echo "java_home"
+
+## Maybe move this to .zshrc.Darwin since the paths are Homebrew specific
+# test_and_source "${CONFIGS_DIR}/.zshrc.fzf"

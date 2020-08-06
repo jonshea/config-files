@@ -1,6 +1,12 @@
-echo "This is .zshrc.Darin"
+# I used to run `$(brew --prefix APP_NAME)`, but that is super slow, so I 
+# am going to hard code this. Doubtless it will fail mysteriously on me 
+# some day.
+export BREW_PREFIX="/usr/local/opt"
 
 path+=('/Applications/Visual Studio Code.app/Contents/Resources/app/bin')
 path=('/usr/local/opt/ruby/bin' ~/.gem/ruby/2.6.0/bin $path)
 
-alias ls='ls -GFah'
+## Homebrew’s paths
+path=(/usr/local/bin /usr/local/sbin $path)
+
+alias ls='ls -GFah --color=auto'

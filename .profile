@@ -80,3 +80,6 @@ export PS1='\h:\W$(__git_ps1 " (%s)")\$ '
 
 export PATH="$HOME/.cargo/bin:$PATH"
 END
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"

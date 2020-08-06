@@ -162,9 +162,11 @@
 ;;  :lighter "jk"
   :global t
   (define-key jcs-keys-mode-map [f6] `camelcase-word-at-point)
-  (define-key jcs-keys-mode-map (kbd "M-[") "“")
+  ;; In Emacs 25.1 you get weird junk when you paste in the terminal if
+  ;; you have M-[ bound to something.
+  ;;  (define-key jcs-keys-mode-map (kbd "M-[") "“")
+  ;;  (define-key jcs-keys-mode-map (kbd "M-]") "‘")
   (define-key jcs-keys-mode-map (kbd "M-{") "”")
-  (define-key jcs-keys-mode-map (kbd "M-]") "‘")
   (define-key jcs-keys-mode-map (kbd "M-}") "’")
   (define-key jcs-keys-mode-map (kbd "M--") "–")
   (define-key jcs-keys-mode-map (kbd "M-_") "—")
