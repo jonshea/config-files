@@ -29,7 +29,7 @@ defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
 # Don’t use iCloud as the default save location
 defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
 
-# Show pull path in Finder window title bars
+# Show full path in Finder window title bars
 defaults write com.apple.finder _FXShowPosixPathInTitle -bool YES
 killall Finder
 
@@ -75,7 +75,7 @@ defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
 
-# Use function F1, F, etc keys as standard function keys
+# Use function F1, F2, etc keys as standard function keys
 defaults write NSGlobalDomain com.apple.keyboard.fnState -bool true
 
 # Use plain text mode for new TextEdit documents

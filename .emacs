@@ -120,6 +120,30 @@
 (add-to-list 'auto-mode-alist '("BUILD$" . python-mode))
 (add-to-list 'auto-mode-alist '("\\.m$" . octave-mode))
 
+;; (if (version< emacs-version "24.4")
+;;     (dolist (i '("php" "php3" "php5" "php7" "php-5" "php-5.5" "php7.0.1"))
+;;       (add-to-list 'interpreter-mode-alist (cons i 'php-mode)))
+;;   (add-to-list 'interpreter-mode-alist
+;;                ;; Match php, php-3, php5, php7, php5.5, php-7.0.1, etc.
+;;                (cons "php\\(?:-?[3457]\\(?:\\.[0-9]+\\)*\\)?" 'php-mode)))
+
+(when (and
+       (version< "24.3" emacs-version)
+       (functionp 'package-installed-p)
+       (not (package-installed-p 'use-package)))
+  (require 'package)
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+  (package-initialize)
+
+  (package-refresh-contents)
+  (package-install 'use-package)
+
+  (use-package magit
+    :ensure t
+    :bind ("C-x g" . magit-status))
+)
+
+
 ;; (setq interprogram-cut-function nil)
 ;; (setq interprogram-paste-function nil)
 ;; (defun paste-from-pasteboard ()
@@ -164,3 +188,16 @@
 ;;                               (delete-frame)))
 
 ;; (global-set-key '[(f5)] 'call-last-kbd-macro)
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages '(magit use-package)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

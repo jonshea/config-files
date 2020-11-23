@@ -79,8 +79,26 @@ is a comment, uncomment."
 ;; (defun my-tab-fix ()
 ;;   (local-set-key [tab] 'indent-or-expand))
 
+(defun camelcase  (s)
+  "Converts underscore to camelCase. FIXME: Will incorrectly capitalize '_foo'."
+  (let ((l (split-string s "_")))
+    (if (cdr l)
+        (concat (car l) (mapconcat 'capitalize (cdr l) ""))
+      (car l)
+      )))
+
+(defun camelcase-word-at-point ()
+  "There's probably a one-liner for this..."
+  (interactive)
+  (let* ((bounds (bounds-of-thing-at-point 'symbol))
+         (p1 (car bounds))
+         (p2 (cdr bounds))
+         (s (delete-and-extract-region p1 p2)))
+    (message s)
+    (insert (camelcase s))))
+
 (defun color-theme-feng-shea ()
-  "`color-theme-feng-shui', but highlight the variables for christ sake."
+  "`color-theme-feng-shui', but highlight the variables please."
   (interactive)
   (color-theme-feng-shui)
   (let ((color-theme-is-cumulative t))
@@ -239,3 +257,4 @@ Ported to Emacs by Greg Pfeil, http://ethanschoonover.com/solarized."
        ;; show-paren
        (show-paren-match-face ((t (:background ,cyan :foreground ,base3))))
        (show-paren-mismatch-face ((t (:background ,red :foreground ,base3))))))))
+

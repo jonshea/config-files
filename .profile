@@ -73,7 +73,7 @@ function ff {
     mdfind -name "${1}"
 }
 
-export PS1='\h:\W$(__git_ps1 " (%s)")\$ '
+export PS1='\h:\W(branch_name)\$ '
 
 ## I do not know where this next line came from.
 ##export COMP_WORDBREAKS=${COMP_WORDBREAKS/\:/}

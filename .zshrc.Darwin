@@ -1,7 +1,21 @@
-# I used to run `$(brew --prefix APP_NAME)`, but that is super slow, so I 
-# am going to hard code this. Doubtless it will fail mysteriously on me 
+# I used to run `$(brew --prefix APP_NAME)`, but that is super slow, so I
+# am going to hard code this. Doubtless it will fail mysteriously on me
 # some day.
-export BREW_PREFIX="/usr/local/opt"
+export BREW_PREFIX="/usr/local"
+
+if type brew &>/dev/null; then
+    fpath=($BREW_PREFIX/share/zsh-completions $fpath)
+fi
+
+function ij {
+  FILENAME=$(echo "$1" | cut -d":" -f1)
+  LINE_NUMBER=$(echo "$1" | cut -d":" -s -f2)
+  if [ -z "${LINE_NUMBER}" ]; then
+    /usr/local/bin/idea $FILENAME
+  else
+    /usr/local/bin/idea --line $LINE_NUMBER $FILENAME
+  fi
+}
 
 path+=('/Applications/Visual Studio Code.app/Contents/Resources/app/bin')
 path=('/usr/local/opt/ruby/bin' ~/.gem/ruby/2.6.0/bin $path)
@@ -10,3 +24,9 @@ path=('/usr/local/opt/ruby/bin' ~/.gem/ruby/2.6.0/bin $path)
 path=(/usr/local/bin /usr/local/sbin $path)
 
 alias ls='ls -GFah --color=auto'
+alias code='code --goto'
+alias python='python3'
+alias python3='/usr/local/opt/python@3.6/bin/python3.6'
+alias python36='/usr/local/opt/python@3.6/bin/python3.6'
+alias python39='/usr/local/opt/python@3.9/bin/python3.9'
+alias python2='/usr/bin/python'

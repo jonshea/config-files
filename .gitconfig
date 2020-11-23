@@ -8,6 +8,7 @@
   patch = !(git diff HEAD~ HEAD --no-ext-diff) > ~/Desktop/$(git rev-parse --short HEAD).patch
   lastweek = !git log --committer=jonshea --no-prefix --simplify-merges --reverse --since='8 days ago'
 [branch]
+  autosetupmerge = always
   autosetuprebase = always
 [core]
   excludesfile = /Users/jonshea/.gitexcludes
@@ -26,12 +27,5 @@
 [diff]
   tool = Kaleidoscope
 	algorithm = patience
-[mergetool "Kaleidoscope"]
-  cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
-  trustExitCode = true
-[mergetool]
-  prompt = false
-[merge]
-  tool = Kaleidoscope
 [init]
 	defaultBranch = main
