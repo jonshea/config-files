@@ -2,6 +2,7 @@
 # https://htr3n.github.io/2018/07/faster-zsh/
 #
 #
+# zmodload zsh/zprof # Begin startup profiling
 export CONFIGS_DIR=~/config-files
 
 function test_and_source {
@@ -13,6 +14,7 @@ test_and_source "${CONFIGS_DIR}/.zshrc.$(uname)"
 test_and_source "${CONFIGS_DIR}/.zshrc.$(hostname)"
 test_and_source "${CONFIGS_DIR}/.zshrc.private"
 
+export PIP_REQUIRE_VIRTUALENV=true
 export JAVA_HOME=$(test -f /usr/libexec/java_home && /usr/libexec/java_home -v 1.8)
 
 export EDITOR=emacs
@@ -42,9 +44,9 @@ setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicate entries first when trimming 
 setopt HIST_IGNORE_DUPS          # Don't record an entry that was just recorded again.
 setopt HIST_FIND_NO_DUPS         # Do not display a line previously found.
 setopt HIST_IGNORE_SPACE         # Don't record an entry starting with a space.
-# HISTORY_IGNORE="(select-window|select-pane|set -t)"
+# HISTORY_IGNORE="(select-window|select-pane|set -t|cd ..)"
 setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording entry.
-
+setopt INC_APPEND_HISTORY        # Append to history file immediately after each command
 setopt AUTO_CD # treat `some/dir/here` as `cd some/dir/here`
 
 alias grep="grep -E --color=auto"
@@ -104,3 +106,5 @@ if test -f /usr/local/etc/bash_completion.d/git-prompt.sh; then
 fi
 
 test_and_source "${CONFIGS_DIR}/.zshrc.placed"
+
+# zprof # End profiling

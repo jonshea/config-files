@@ -132,17 +132,20 @@
        (functionp 'package-installed-p)
        (not (package-installed-p 'use-package)))
   (require 'package)
-  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+  (add-to-list 'package-archives ("melpa" . "https://melpa.org/packages/") t)
+  (add-to-list 'package-archives ("org" . "https://orgmode.org/elpa/") t)
+  (add-to-list 'package-archives ("elpa" . "https://elpa.gnu.org/packages/") t)
+
   (package-initialize)
 
   (package-refresh-contents)
-  (package-install 'use-package)
+  (unless (package-installed-p 'use-package)
+    (package-install 'use-package))
 
   (use-package magit
     :ensure t
     :bind ("C-x g" . magit-status))
 )
-
 
 ;; (setq interprogram-cut-function nil)
 ;; (setq interprogram-paste-function nil)

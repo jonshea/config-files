@@ -7,6 +7,8 @@
   git = !git
   patch = !(git diff HEAD~ HEAD --no-ext-diff) > ~/Desktop/$(git rev-parse --short HEAD).patch
   lastweek = !git log --committer=jonshea --no-prefix --simplify-merges --reverse --since='8 days ago'
+  lastsixmonths = !git log --committer=jonshea --no-prefix --simplify-merges --reverse --since='183 days ago'
+  lastyear = !git log --committer=jonshea --no-prefix --simplify-merges --reverse --since='365 days ago'
 [branch]
   autosetupmerge = always
   autosetuprebase = always
@@ -29,3 +31,5 @@
 	algorithm = patience
 [init]
 	defaultBranch = main
+[http]
+	cookiefile = /Users/jonshea/.gitcookies

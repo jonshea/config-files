@@ -19,6 +19,7 @@ function ij {
 
 path+=('/Applications/Visual Studio Code.app/Contents/Resources/app/bin')
 path=('/usr/local/opt/ruby/bin' ~/.gem/ruby/2.6.0/bin $path)
+PATH="$PATH:/Users/jonshea/Library/Application Support/Coursier/bin"
 
 ## Homebrew’s paths
 path=(/usr/local/bin /usr/local/sbin $path)

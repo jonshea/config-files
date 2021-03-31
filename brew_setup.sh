@@ -16,28 +16,28 @@ brew install cask
 
 brew tap homebrew/cask-versions
 
-brew cask install noisy
-brew cask alfred
-brew cask 1password
-brew cask install firefox
-brew cask install google-chrome
-brew cask install iterm2
-brew cask install visual-studio-code
-brew cask install imageoptim
-brew cask install imagealpha
-brew cask install grandperspective
-brew cask install vlc
-brew cask install superduper
-brew cask install cyberduck
-brew cask install slack
-brew cask install macdown
-brew cask install kaleidoscope
-brew cask install arq
-brew cask install choosy
-brew cask install
+brew install --cask noisy
+brew install --cask alfred
+brew install --cask 1password
+brew install --cask firefox
+brew install --cask google-chrome
+brew install --cask iterm2
+brew install --cask visual-studio-code
+brew install --cask imageoptim
+brew install --cask imagealpha
+brew install --cask grandperspective
+brew install --cask vlc
+brew install --cask superduper
+brew install --cask cyberduck
+brew install --cask slack
+brew install --cask macdown
+brew install --cask kaleidoscope
+brew install --cask arq
+brew install --cask choosy
 
-# brew cask install betterzip
-# brew cask install discord
+brew install --cask karabiner-elements
+# brew install --cask betterzip
+# brew install --cask discord
 
 brew install git
 brew install wget
@@ -55,6 +55,8 @@ brew install ripgrep
 brew tap aykamko/tag-ag
 brew install tag-ag
 
+# Python
+# See https://news.ycombinator.com/item?id=25597246
 brew install python
 brew install pyenv
 
@@ -63,14 +65,14 @@ brew install pyenv
 brew tap AdoptOpenJDK/openjdk
 brew install adoptopenjdk
 
-# brew cask install karabiner-elements  # remap keys, emacs shortcuts
+# brew install --cask karabiner-elements  # remap keys, emacs shortcuts
 
 ### Quicklook plugins https://github.com/sindresorhus/quick-look-plugins
-# brew cask install qlcolorcode # syntax highlighting in preview
-# brew cask install qlstephen  # preview plaintext files without extension
-# brew cask install qlmarkdown  # preview markdown files
-# brew cask install quicklook-json  # preview json files
-# brew cask install epubquicklook  # preview epubs, make nice icons
-# brew cask install quicklook-csv  # preview csvs
+# brew install --cask qlcolorcode # syntax highlighting in preview
+# brew install --cask qlstephen  # preview plaintext files without extension
+# brew install --cask qlmarkdown  # preview markdown files
+# brew install --cask quicklook-json  # preview json files
+# brew install --cask epubquicklook  # preview epubs, make nice icons
+# brew install --cask quicklook-csv  # preview csvs
 
 brew cleanup
