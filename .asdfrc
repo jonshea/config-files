@@ -1,0 +1,8 @@
+# location: ~/.asdfrc
+
+# http://asdf-vm.com/manage/configuration.html
+
+legacy_version_file = yes
+
+# https://github.com/halcyon/asdf-java#macos
+java_macos_integration_enable = yes
