@@ -80,52 +80,16 @@ install_macos_dependencies() {
         fi
     fi
     
-    # Update brew and install essential packages
+    # Update brew
     brew update
     
-    # Essential development tools
-    local packages=(
-        "git"
-        "zsh"
-        "zsh-completions"
-        "tmux"
-        "wget"
-        "curl"
-        "fzf"
-        "fd"
-        "ripgrep"
-        "python"
-        "pyenv"
-        "node"
-        "yarn"
-        "redis"
-        "postgresql"
-    )
-    
-    for package in "${packages[@]}"; do
-        if ! brew list "$package" &>/dev/null; then
-            log_info "Installing $package..."
-            brew install "$package" || log_warning "Failed to install $package"
-        else
-            log_info "$package is already installed"
-        fi
-    done
-    
-    # Install cask applications
-    local cask_apps=(
-        "visual-studio-code"
-        "iterm2"
-        "docker"
-    )
-    
-    for app in "${cask_apps[@]}"; do
-        if ! brew list --cask "$app" &>/dev/null; then
-            log_info "Installing $app..."
-            brew install --cask "$app" || log_warning "Failed to install $app"
-        else
-            log_info "$app is already installed"
-        fi
-    done
+    # Check if Brewfile exists and use it
+    if [[ -f "Brewfile" ]]; then
+        log_info "Installing packages from Brewfile..."
+        brew bundle install --file=Brewfile || log_warning "Some packages from Brewfile failed to install"
+    else
+        log_warning "Brewfile not found, skipping package installation"
+    fi
 }
 
 install_linux_dependencies() {
@@ -364,9 +328,10 @@ main() {
     log_info "Working directory: $(pwd)"
     
     # Ensure we're in the right directory
-    if [[ ! -f ".zshrc" ]] || [[ ! -f ".gitconfig" ]]; then
+    if [[ ! -f ".zshrc" ]] || [[ ! -f ".gitconfig" ]] || [[ ! -f "Brewfile" ]]; then
         log_error "This doesn't appear to be the config-files repository root."
         log_error "Please run this script from the repository root directory."
+        log_error "Required files: .zshrc, .gitconfig, Brewfile"
         exit 1
     fi
     
